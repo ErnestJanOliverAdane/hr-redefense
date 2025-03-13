@@ -86,6 +86,13 @@
                         </a>
 
                     </li>
+                    <li class="nk-menu-item">
+                        <a href="/record" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-reports"></em></span>
+                            <span class="nk-menu-text">Service Record</span>
+                        </a>
+
+                    </li>
 
                     <li class="nk-menu-heading pt-3">
                         <h6 class="overline-title text-primary-alt">OTHERS</h6>
@@ -133,7 +140,7 @@
                         <ul class="nk-menu-sub">
 
                             <li class="nk-menu-item">
-                            <a href="/ccosreport" class="nk-menu-link">
+                                <a href="/ccosreport" class="nk-menu-link">
                                     <span class="nk-menu-text">Casual/Contractual Reports</span>
                                 </a>
                             </li>

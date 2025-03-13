@@ -21,10 +21,10 @@
         @endif
 
         <!-- Form Action -->
-        <form method="POST" 
-        action="{{ isset($personalInfo) ? route('personal.data.sheet.update', ['personal_information_id' => $personalInfo->personal_information_id]) : route('personal.data.sheet.store') }}" 
-        onsubmit="return validateForm()">
-        @csrf
+        <form method="POST"
+            action="{{ isset($personalInfo) ? route('personal.data.sheet.update', ['personal_information_id' => $personalInfo->personal_information_id]) : route('personal.data.sheet.store') }}"
+            onsubmit="return validateForm()">
+            @csrf
 
             <h5>I. PERSONAL INFORMATION</h5>
             <table class="table table-bordered">
@@ -587,558 +587,549 @@
                     </tr>
                 </tbody>
             </table>
-                    <!-- Civil Service Eligibility -->
-                    <h5>IV. Civil Service Eligibility</h5>
-                    <table class="table table-bordered">
-                        <thead>
+            <!-- Civil Service Eligibility -->
+            <h5>IV. Civil Service Eligibility</h5>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Eligibility</th>
+                        <th>Rating</th>
+                        <th>Date of Examination</th>
+                        <th>Place of Examination</th>
+                        <th>License Number</th>
+                        <th>Date of Release</th>
+                    </tr>
+                </thead>
+                <tbody id="civilServiceTable">
+                    @if (old('eligibility'))
+                        @foreach (old('eligibility') as $key => $eligibility)
                             <tr>
-                                <th>Eligibility</th>
-                                <th>Rating</th>
-                                <th>Date of Examination</th>
-                                <th>Place of Examination</th>
-                                <th>License Number</th>
-                                <th>Date of Release</th>
+                                <td>
+                                    <input type="text" name="eligibility[]" class="form-control"
+                                        value="{{ $eligibility }}">
+                                </td>
+                                <td>
+                                    <input type="text" name="rating[]" class="form-control"
+                                        value="{{ old('rating.' . $key) }}">
+                                </td>
+                                <td>
+                                    <input type="date" name="exam_date[]" class="form-control"
+                                        value="{{ old('exam_date.' . $key) }}">
+                                </td>
+                                <td>
+                                    <input type="text" name="exam_place[]" class="form-control"
+                                        value="{{ old('exam_place.' . $key) }}">
+                                </td>
+                                <td>
+                                    <input type="text" name="license_number[]" class="form-control"
+                                        value="{{ old('license_number.' . $key) }}">
+                                </td>
+                                <td>
+                                    <input type="date" name="release_date[]" class="form-control"
+                                        value="{{ old('release_date.' . $key) }}">
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger"
+                                        onclick="removeRow(this)">Remove</button>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody id="civilServiceTable">
-                            @if (old('eligibility'))
-                                @foreach (old('eligibility') as $key => $eligibility)
-                                    <tr>
-                                        <td>
-                                            <input type="text" name="eligibility[]" class="form-control"
-                                                value="{{ $eligibility }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="rating[]" class="form-control"
-                                                value="{{ old('rating.' . $key) }}">
-                                        </td>
-                                        <td>
-                                            <input type="date" name="exam_date[]" class="form-control"
-                                                value="{{ old('exam_date.' . $key) }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="exam_place[]" class="form-control"
-                                                value="{{ old('exam_place.' . $key) }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="license_number[]" class="form-control"
-                                                value="{{ old('license_number.' . $key) }}">
-                                        </td>
-                                        <td>
-                                            <input type="date" name="release_date[]" class="form-control"
-                                                value="{{ old('release_date.' . $key) }}">
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger"
-                                                onclick="removeRow(this)">Remove</button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @elseif(isset($personalInfo) && $personalInfo->civilServiceEligibility)
-                                @foreach ($personalInfo->civilServiceEligibility as $eligibility)
-                                    <tr>
-                                        <td>
-                                            <input type="text" name="eligibility[]" class="form-control"
-                                                value="{{ $eligibility->eligibility }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="rating[]" class="form-control"
-                                                value="{{ $eligibility->rating }}">
-                                        </td>
-                                        <td>
-                                            <input type="date" name="exam_date[]" class="form-control"
-                                                value="{{ $eligibility->exam_date }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="exam_place[]" class="form-control"
-                                                value="{{ $eligibility->exam_place }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="license_number[]" class="form-control"
-                                                value="{{ $eligibility->license_number }}">
-                                        </td>
-                                        <td>
-                                            <input type="date" name="release_date[]" class="form-control"
-                                                value="{{ $eligibility->release_date }}">
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger"
-                                                onclick="removeRow(this)">Remove</button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @else
-                                <tr>
-                                    <td>
-                                        <input type="text" name="eligibility[]" class="form-control">
-                                    </td>
-                                    <td>
-                                        <input type="text" name="rating[]" class="form-control">
-                                    </td>
-                                    <td>
-                                        <input type="date" name="exam_date[]" class="form-control">
-                                    </td>
-                                    <td>
-                                        <input type="text" name="exam_place[]" class="form-control">
-                                    </td>
-                                    <td>
-                                        <input type="text" name="license_number[]" class="form-control">
-                                    </td>
-                                    <td>
-                                        <input type="date" name="release_date[]" class="form-control">
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger"
-                                            onclick="removeRow(this)">Remove</button>
-                                    </td>
-                                </tr>
-                            @endif
-                        </tbody>
-                    </table>
-                    <button type="button" class="btn btn-primary mb-3" onclick="addCivilService()">Add Civil Service
-                        Eligibility</button>
+                        @endforeach
+                    @elseif(isset($personalInfo) && $personalInfo->civilServiceEligibility)
+                        @foreach ($personalInfo->civilServiceEligibility as $eligibility)
+                            <tr>
+                                <td>
+                                    <input type="text" name="eligibility[]" class="form-control"
+                                        value="{{ $eligibility->eligibility }}">
+                                </td>
+                                <td>
+                                    <input type="text" name="rating[]" class="form-control"
+                                        value="{{ $eligibility->rating }}">
+                                </td>
+                                <td>
+                                    <input type="date" name="exam_date[]" class="form-control"
+                                        value="{{ $eligibility->exam_date }}">
+                                </td>
+                                <td>
+                                    <input type="text" name="exam_place[]" class="form-control"
+                                        value="{{ $eligibility->exam_place }}">
+                                </td>
+                                <td>
+                                    <input type="text" name="license_number[]" class="form-control"
+                                        value="{{ $eligibility->license_number }}">
+                                </td>
+                                <td>
+                                    <input type="date" name="release_date[]" class="form-control"
+                                        value="{{ $eligibility->release_date }}">
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger"
+                                        onclick="removeRow(this)">Remove</button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td>
+                                <input type="text" name="eligibility[]" class="form-control">
+                            </td>
+                            <td>
+                                <input type="text" name="rating[]" class="form-control">
+                            </td>
+                            <td>
+                                <input type="date" name="exam_date[]" class="form-control">
+                            </td>
+                            <td>
+                                <input type="text" name="exam_place[]" class="form-control">
+                            </td>
+                            <td>
+                                <input type="text" name="license_number[]" class="form-control">
+                            </td>
+                            <td>
+                                <input type="date" name="release_date[]" class="form-control">
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger" onclick="removeRow(this)">Remove</button>
+                            </td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary mb-3" onclick="addCivilService()">Add Civil Service
+                Eligibility</button>
 
-                    <!-- Work Experience -->
-                    <h5>V. Work Experience</h5>
-                    <table class="table table-bordered">
-                        <thead>
+            <!-- Work Experience -->
+            <h5>V. Work Experience</h5>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Inclusive Dates</th>
+                        <th>Position Title</th>
+                        <th>Department</th>
+                        <th>Monthly Salary</th>
+                        <th>Salary Grade</th>
+                        <th>Status of Appointment</th>
+                        <th>Gov't Service</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="workExperienceTable">
+                    @if (old('work'))
+                        @foreach (old('work.position_title') as $key => $position)
                             <tr>
-                                <th>Inclusive Dates</th>
-                                <th>Position Title</th>
-                                <th>Department</th>
-                                <th>Monthly Salary</th>
-                                <th>Salary Grade</th>
-                                <th>Status of Appointment</th>
-                                <th>Gov't Service</th>
-                                <th>Action</th>
+                                <td>
+                                    <input type="date" class="form-control mb-2" name="work[from_date][]"
+                                        value="{{ old('work.from_date.' . $key) }}">
+                                    <input type="date" class="form-control" name="work[to_date][]"
+                                        value="{{ old('work.to_date.' . $key) }}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="work[position_title][]"
+                                        value="{{ $position }}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="work[department][]"
+                                        value="{{ old('work.department.' . $key) }}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="work[monthly_salary][]"
+                                        value="{{ old('work.monthly_salary.' . $key) }}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="work[salary_grade][]"
+                                        value="{{ old('work.salary_grade.' . $key) }}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="work[status_of_appointment][]"
+                                        value="{{ old('work.status_of_appointment.' . $key) }}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="work[gov_service][]"
+                                        value="{{ old('work.gov_service.' . $key) }}">
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger remove-row">Remove</button>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody id="workExperienceTable">
-                            @if (old('work'))
-                                @foreach (old('work.position_title') as $key => $position)
-                                    <tr>
-                                        <td>
-                                            <input type="date" class="form-control mb-2" name="work[from_date][]"
-                                                value="{{ old('work.from_date.' . $key) }}">
-                                            <input type="date" class="form-control" name="work[to_date][]"
-                                                value="{{ old('work.to_date.' . $key) }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" name="work[position_title][]"
-                                                value="{{ $position }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" name="work[department][]"
-                                                value="{{ old('work.department.' . $key) }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" name="work[monthly_salary][]"
-                                                value="{{ old('work.monthly_salary.' . $key) }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" name="work[salary_grade][]"
-                                                value="{{ old('work.salary_grade.' . $key) }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control"
-                                                name="work[status_of_appointment][]"
-                                                value="{{ old('work.status_of_appointment.' . $key) }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" name="work[gov_service][]"
-                                                value="{{ old('work.gov_service.' . $key) }}">
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger remove-row">Remove</button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @elseif(isset($personalInfo) && $personalInfo->workExperience)
-                                @foreach ($personalInfo->workExperience as $work)
-                                    <tr>
-                                        <td>
-                                            <input type="date" class="form-control mb-2" name="work[from_date][]"
-                                                value="{{ $work->from_date }}">
-                                            <input type="date" class="form-control" name="work[to_date][]"
-                                                value="{{ $work->to_date }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" name="work[position_title][]"
-                                                value="{{ $work->position_title }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" name="work[department][]"
-                                                value="{{ $work->department }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" name="work[monthly_salary][]"
-                                                value="{{ $work->monthly_salary }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" name="work[salary_grade][]"
-                                                value="{{ $work->salary_grade }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control"
-                                                name="work[status_of_appointment][]"
-                                                value="{{ $work->status_of_appointment }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control" name="work[gov_service][]"
-                                                value="{{ $work->govt_service }}">
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger remove-row">Remove</button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @else
-                                <tr>
-                                    <!-- Default empty row -->
-                                    <td>
-                                        <input type="date" class="form-control mb-2" name="work[from_date][]">
-                                        <input type="date" class="form-control" name="work[to_date][]">
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="work[position_title][]">
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="work[department][]">
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="work[monthly_salary][]">
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="work[salary_grade][]">
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="work[status_of_appointment][]">
-                                    </td>
-                                    <td>
-                                        <input type="text" class="form-control" name="work[gov_service][]">
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger remove-row">Remove</button>
-                                    </td>
-                                </tr>
-                            @endif
-                        </tbody>
-                    </table>
-                    <button type="button" class="btn btn-primary mb-3" onclick="addWork()">Add Work Experience</button>
+                        @endforeach
+                    @elseif(isset($personalInfo) && $personalInfo->workExperience)
+                        @foreach ($personalInfo->workExperience as $work)
+                            <tr>
+                                <td>
+                                    <input type="date" class="form-control mb-2" name="work[from_date][]"
+                                        value="{{ $work->from_date }}">
+                                    <input type="date" class="form-control" name="work[to_date][]"
+                                        value="{{ $work->to_date }}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="work[position_title][]"
+                                        value="{{ $work->position_title }}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="work[department][]"
+                                        value="{{ $work->department }}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="work[monthly_salary][]"
+                                        value="{{ $work->monthly_salary }}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="work[salary_grade][]"
+                                        value="{{ $work->salary_grade }}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="work[status_of_appointment][]"
+                                        value="{{ $work->status_of_appointment }}">
+                                </td>
+                                <td>
+                                    <input type="text" class="form-control" name="work[gov_service][]"
+                                        value="{{ $work->govt_service }}">
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger remove-row">Remove</button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <!-- Default empty row -->
+                            <td>
+                                <input type="date" class="form-control mb-2" name="work[from_date][]">
+                                <input type="date" class="form-control" name="work[to_date][]">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="work[position_title][]">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="work[department][]">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="work[monthly_salary][]">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="work[salary_grade][]">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="work[status_of_appointment][]">
+                            </td>
+                            <td>
+                                <input type="text" class="form-control" name="work[gov_service][]">
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger remove-row">Remove</button>
+                            </td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary mb-3" onclick="addWork()">Add Work Experience</button>
 
-                    <!-- Voluntary Work -->
-                    <h5>VI. Voluntary Work or Involvement in Civic/Non-Government/People/Voluntary Organizations</h5>
-                    <table class="table table-bordered">
-                        <thead>
+            <!-- Voluntary Work -->
+            <h5>VI. Voluntary Work or Involvement in Civic/Non-Government/People/Voluntary Organizations</h5>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Name of the Organization</th>
+                        <th>Inclusive Dates</th>
+                        <th>Number of Hours</th>
+                        <th>Position / Nature of Work</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="VoluntaryTable">
+                    @if (old('voluntary'))
+                        @foreach (old('voluntary.organization_name') as $key => $org)
                             <tr>
-                                <th>Name of the Organization</th>
-                                <th>Inclusive Dates</th>
-                                <th>Number of Hours</th>
-                                <th>Position / Nature of Work</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="VoluntaryTable">
-                            @if (old('voluntary'))
-                                @foreach (old('voluntary.organization_name') as $key => $org)
-                                    <tr>
-                                        <td>
-                                            <input type="text" name="voluntary[organization_name][]"
-                                                class="form-control" value="{{ $org }}"
-                                                placeholder="Name of Organization">
-                                        </td>
-                                        <td>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <input type="date" name="voluntary[from_date][]"
-                                                        class="form-control"
-                                                        value="{{ old('voluntary.from_date.' . $key) }}">
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <input type="date" name="voluntary[to_date][]"
-                                                        class="form-control"
-                                                        value="{{ old('voluntary.to_date.' . $key) }}">
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <input type="number" name="voluntary[number_of_hours][]"
-                                                class="form-control"
-                                                value="{{ old('voluntary.number_of_hours.' . $key) }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="voluntary[position][]" class="form-control"
-                                                value="{{ old('voluntary.position.' . $key) }}">
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger remove-row">Remove</button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @elseif(isset($personalInfo) && $personalInfo->voluntaryWork)
-                                @foreach ($personalInfo->voluntaryWork as $voluntary)
-                                    <tr>
-                                        <td>
-                                            <input type="text" name="voluntary[organization_name][]"
-                                                class="form-control" value="{{ $voluntary->organization_name }}"
-                                                placeholder="Name of Organization">
-                                        </td>
-                                        <td>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <input type="date" name="voluntary[from_date][]"
-                                                        class="form-control" value="{{ $voluntary->from_date }}">
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <input type="date" name="voluntary[to_date][]"
-                                                        class="form-control" value="{{ $voluntary->to_date }}">
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <input type="number" name="voluntary[number_of_hours][]"
-                                                class="form-control" value="{{ $voluntary->hours }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="voluntary[position][]" class="form-control"
-                                                value="{{ $voluntary->position }}">
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger remove-row">Remove</button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @else
-                                <tr>
-                                    <td>
-                                        <input type="text" name="voluntary[organization_name][]" class="form-control"
-                                            placeholder="Name of Organization">
-                                    </td>
-                                    <td>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <input type="date" name="voluntary[from_date][]" class="form-control">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <input type="date" name="voluntary[to_date][]" class="form-control">
-                                            </div>
+                                <td>
+                                    <input type="text" name="voluntary[organization_name][]" class="form-control"
+                                        value="{{ $org }}" placeholder="Name of Organization">
+                                </td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input type="date" name="voluntary[from_date][]" class="form-control"
+                                                value="{{ old('voluntary.from_date.' . $key) }}">
                                         </div>
-                                    </td>
-                                    <td>
-                                        <input type="number" name="voluntary[number_of_hours][]" class="form-control"
-                                            placeholder="Number of Hours">
-                                    </td>
-                                    <td>
-                                        <input type="text" name="voluntary[position][]" class="form-control"
-                                            placeholder="Position / Nature of Work">
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger remove-row">Remove</button>
-                                    </td>
-                                </tr>
-                            @endif
-                        </tbody>
-                    </table>
-                    <button type="button" class="btn btn-primary mb-3" onclick="addVoluntary()">Add Voluntary
-                        Work</button>
-
-                    <!-- Learning & Development -->
-                    <h5>VII. Learning and Development (L&D) Interventions/Training Programs Attended</h5>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Title of Learning and Development Interventions/Training Programs</th>
-                                <th>Inclusive Dates of Attendance</th>
-                                <th>Number of Hours</th>
-                                <th>Type of LD</th>
-                                <th>Conducted/Sponsored By</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody id="LearningTable">
-                            @if (old('learning'))
-                                @foreach (old('learning.title') as $key => $title)
-                                    <tr>
-                                        <td>
-                                            <input type="text" name="learning[title][]" class="form-control"
-                                                value="{{ $title }}">
-                                        </td>
-                                        <td>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <input type="date" name="learning[from_date][]"
-                                                        class="form-control"
-                                                        value="{{ old('learning.from_date.' . $key) }}">
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <input type="date" name="learning[to_date][]" class="form-control"
-                                                        value="{{ old('learning.to_date.' . $key) }}">
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <input type="number" name="learning[number_of_hours][]" class="form-control"
-                                                value="{{ old('learning.number_of_hours.' . $key) }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="learning[type_of_ld][]" class="form-control"
-                                                value="{{ old('learning.type_of_ld.' . $key) }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="learning[conducted_by][]" class="form-control"
-                                                value="{{ old('learning.conducted_by.' . $key) }}">
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger remove-row">Remove</button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @elseif(isset($personalInfo) && $personalInfo->learningDevelopment)
-                                @foreach ($personalInfo->learningDevelopment as $learning)
-                                    <tr>
-                                        <td>
-                                            <input type="text" name="learning[title][]" class="form-control"
-                                                value="{{ $learning->title }}">
-                                        </td>
-                                        <td>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <input type="date" name="learning[from_date][]"
-                                                        class="form-control" value="{{ $learning->from_date }}">
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <input type="date" name="learning[to_date][]" class="form-control"
-                                                        value="{{ $learning->to_date }}">
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <input type="number" name="learning[number_of_hours][]" class="form-control"
-                                                value="{{ $learning->hours }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="learning[type_of_ld][]" class="form-control"
-                                                value="{{ $learning->type }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="learning[conducted_by][]" class="form-control"
-                                                value="{{ $learning->conducted_by }}">
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger remove-row">Remove</button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @else
-                                <tr>
-                                    <td>
-                                        <input type="text" name="learning[title][]" class="form-control">
-                                    </td>
-                                    <td>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <input type="date" name="learning[from_date][]" class="form-control">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <input type="date" name="learning[to_date][]" class="form-control">
-                                            </div>
+                                        <div class="col-md-6">
+                                            <input type="date" name="voluntary[to_date][]" class="form-control"
+                                                value="{{ old('voluntary.to_date.' . $key) }}">
                                         </div>
-                                    </td>
-                                    <td>
-                                        <input type="number" name="learning[number_of_hours][]" class="form-control">
-                                    </td>
-                                    <td>
-                                        <input type="text" name="learning[type_of_ld][]" class="form-control">
-                                    </td>
-                                    <td>
-                                        <input type="text" name="learning[conducted_by][]" class="form-control">
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger remove-row">Remove</button>
-                                    </td>
-                                </tr>
-                            @endif
-                        </tbody>
-                    </table>
-                    <button type="button" class="btn btn-primary mb-3" onclick="addLearningRow()">Add Learning &
-                        Development</button>
-
-                    <!-- Other Information -->
-                    <h5>VIII. Other Information</h5>
-                    <table class="table table-bordered">
-                        <thead>
-                            <tr>
-                                <th>Special Skills and Hobbies</th>
-                                <th>Non-Academic Distinctions/Recognition</th>
-                                <th>Membership in Association/Organization</th>
-                                <th>Action</th>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="number" name="voluntary[number_of_hours][]" class="form-control"
+                                        value="{{ old('voluntary.number_of_hours.' . $key) }}">
+                                </td>
+                                <td>
+                                    <input type="text" name="voluntary[position][]" class="form-control"
+                                        value="{{ old('voluntary.position.' . $key) }}">
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger remove-row">Remove</button>
+                                </td>
                             </tr>
-                        </thead>
-                        <tbody id="OtherInfoTable">
-                            @if (old('other'))
-                                @foreach (old('other.special_skills') as $key => $skill)
-                                    <tr>
-                                        <td>
-                                            <input type="text" name="other[special_skills][]" class="form-control"
-                                                value="{{ $skill }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="other[distinctions][]" class="form-control"
-                                                value="{{ old('other.distinctions.' . $key) }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="other[membership][]" class="form-control"
-                                                value="{{ old('other.membership.' . $key) }}">
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger remove-row">Remove</button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @elseif(isset($personalInfo) && $personalInfo->otherInformation)
-                                @foreach ($personalInfo->otherInformation as $other)
-                                    <tr>
-                                        <td>
-                                            <input type="text" name="other[special_skills][]" class="form-control"
-                                                value="{{ $other->special_skills }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="other[distinctions][]" class="form-control"
-                                                value="{{ $other->distinctions }}">
-                                        </td>
-                                        <td>
-                                            <input type="text" name="other[membership][]" class="form-control"
-                                                value="{{ $other->membership }}">
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-danger remove-row">Remove</button>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @else
-                                <tr>
-                                    <td>
-                                        <input type="text" name="other[special_skills][]" class="form-control">
-                                    </td>
-                                    <td>
-                                        <input type="text" name="other[distinctions][]" class="form-control">
-                                    </td>
-                                    <td>
-                                        <input type="text" name="other[membership][]" class="form-control">
-                                    </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger remove-row">Remove</button>
-                                    </td>
-                                </tr>
-                            @endif
-                        </tbody>
-                    </table>
-                    <button type="button" class="btn btn-primary mb-3" onclick="addOtherInfoRow()">Add Other
-                        Information</button>
+                        @endforeach
+                    @elseif(isset($personalInfo) && $personalInfo->voluntaryWork)
+                        @foreach ($personalInfo->voluntaryWork as $voluntary)
+                            <tr>
+                                <td>
+                                    <input type="text" name="voluntary[organization_name][]" class="form-control"
+                                        value="{{ $voluntary->organization_name }}" placeholder="Name of Organization">
+                                </td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input type="date" name="voluntary[from_date][]" class="form-control"
+                                                value="{{ $voluntary->from_date }}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="date" name="voluntary[to_date][]" class="form-control"
+                                                value="{{ $voluntary->to_date }}">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="number" name="voluntary[number_of_hours][]" class="form-control"
+                                        value="{{ $voluntary->hours }}">
+                                </td>
+                                <td>
+                                    <input type="text" name="voluntary[position][]" class="form-control"
+                                        value="{{ $voluntary->position }}">
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger remove-row">Remove</button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td>
+                                <input type="text" name="voluntary[organization_name][]" class="form-control"
+                                    placeholder="Name of Organization">
+                            </td>
+                            <td>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input type="date" name="voluntary[from_date][]" class="form-control">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="date" name="voluntary[to_date][]" class="form-control">
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <input type="number" name="voluntary[number_of_hours][]" class="form-control"
+                                    placeholder="Number of Hours">
+                            </td>
+                            <td>
+                                <input type="text" name="voluntary[position][]" class="form-control"
+                                    placeholder="Position / Nature of Work">
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger remove-row">Remove</button>
+                            </td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary mb-3" onclick="addVoluntary()">Add Voluntary
+                Work</button>
 
-                    <div class="text-center mt-4 mb-4">
-                        <button type="submit" class="btn btn-primary">Submit Personal Data Sheet</button>
-                    </div>
+            <!-- Learning & Development -->
+            <h5>VII. Learning and Development (L&D) Interventions/Training Programs Attended</h5>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Title of Learning and Development Interventions/Training Programs</th>
+                        <th>Inclusive Dates of Attendance</th>
+                        <th>Number of Hours</th>
+                        <th>Type of LD</th>
+                        <th>Conducted/Sponsored By</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="LearningTable">
+                    @if (old('learning'))
+                        @foreach (old('learning.title') as $key => $title)
+                            <tr>
+                                <td>
+                                    <input type="text" name="learning[title][]" class="form-control"
+                                        value="{{ $title }}">
+                                </td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input type="date" name="learning[from_date][]" class="form-control"
+                                                value="{{ old('learning.from_date.' . $key) }}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="date" name="learning[to_date][]" class="form-control"
+                                                value="{{ old('learning.to_date.' . $key) }}">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="number" name="learning[number_of_hours][]" class="form-control"
+                                        value="{{ old('learning.number_of_hours.' . $key) }}">
+                                </td>
+                                <td>
+                                    <input type="text" name="learning[type_of_ld][]" class="form-control"
+                                        value="{{ old('learning.type_of_ld.' . $key) }}">
+                                </td>
+                                <td>
+                                    <input type="text" name="learning[conducted_by][]" class="form-control"
+                                        value="{{ old('learning.conducted_by.' . $key) }}">
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger remove-row">Remove</button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @elseif(isset($personalInfo) && $personalInfo->learningDevelopment)
+                        @foreach ($personalInfo->learningDevelopment as $learning)
+                            <tr>
+                                <td>
+                                    <input type="text" name="learning[title][]" class="form-control"
+                                        value="{{ $learning->title }}">
+                                </td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <input type="date" name="learning[from_date][]" class="form-control"
+                                                value="{{ $learning->from_date }}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <input type="date" name="learning[to_date][]" class="form-control"
+                                                value="{{ $learning->to_date }}">
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="number" name="learning[number_of_hours][]" class="form-control"
+                                        value="{{ $learning->hours }}">
+                                </td>
+                                <td>
+                                    <input type="text" name="learning[type_of_ld][]" class="form-control"
+                                        value="{{ $learning->type }}">
+                                </td>
+                                <td>
+                                    <input type="text" name="learning[conducted_by][]" class="form-control"
+                                        value="{{ $learning->conducted_by }}">
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger remove-row">Remove</button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td>
+                                <input type="text" name="learning[title][]" class="form-control">
+                            </td>
+                            <td>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <input type="date" name="learning[from_date][]" class="form-control">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="date" name="learning[to_date][]" class="form-control">
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <input type="number" name="learning[number_of_hours][]" class="form-control">
+                            </td>
+                            <td>
+                                <input type="text" name="learning[type_of_ld][]" class="form-control">
+                            </td>
+                            <td>
+                                <input type="text" name="learning[conducted_by][]" class="form-control">
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger remove-row">Remove</button>
+                            </td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary mb-3" onclick="addLearningRow()">Add Learning &
+                Development</button>
+
+            <!-- Other Information -->
+            <h5>VIII. Other Information</h5>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Special Skills and Hobbies</th>
+                        <th>Non-Academic Distinctions/Recognition</th>
+                        <th>Membership in Association/Organization</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="OtherInfoTable">
+                    @if (old('other'))
+                        @foreach (old('other.special_skills') as $key => $skill)
+                            <tr>
+                                <td>
+                                    <input type="text" name="other[special_skills][]" class="form-control"
+                                        value="{{ $skill }}">
+                                </td>
+                                <td>
+                                    <input type="text" name="other[distinctions][]" class="form-control"
+                                        value="{{ old('other.distinctions.' . $key) }}">
+                                </td>
+                                <td>
+                                    <input type="text" name="other[membership][]" class="form-control"
+                                        value="{{ old('other.membership.' . $key) }}">
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger remove-row">Remove</button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @elseif(isset($personalInfo) && $personalInfo->otherInformation)
+                        @foreach ($personalInfo->otherInformation as $other)
+                            <tr>
+                                <td>
+                                    <input type="text" name="other[special_skills][]" class="form-control"
+                                        value="{{ $other->special_skills }}">
+                                </td>
+                                <td>
+                                    <input type="text" name="other[distinctions][]" class="form-control"
+                                        value="{{ $other->distinctions }}">
+                                </td>
+                                <td>
+                                    <input type="text" name="other[membership][]" class="form-control"
+                                        value="{{ $other->membership }}">
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger remove-row">Remove</button>
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
+                        <tr>
+                            <td>
+                                <input type="text" name="other[special_skills][]" class="form-control">
+                            </td>
+                            <td>
+                                <input type="text" name="other[distinctions][]" class="form-control">
+                            </td>
+                            <td>
+                                <input type="text" name="other[membership][]" class="form-control">
+                            </td>
+                            <td>
+                                <button type="button" class="btn btn-danger remove-row">Remove</button>
+                            </td>
+                        </tr>
+                    @endif
+                </tbody>
+            </table>
+            <button type="button" class="btn btn-primary mb-3" onclick="addOtherInfoRow()">Add Other
+                Information</button>
+
+            <div class="text-center mt-4 mb-4">
+                <button type="submit" class="btn btn-primary">Submit Personal Data Sheet</button>
+            </div>
         </form>
     </div>
 

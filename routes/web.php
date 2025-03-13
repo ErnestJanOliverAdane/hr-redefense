@@ -28,11 +28,13 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\EmployeeReportController;
 use App\Models\MasterlistModel;
+use App\Http\Controllers\ServiceController;
 
 
 
 
-Route::post('   ', [LoginController::class, 'login'])->name('employee.login');
+
+// Route::post('   ', [LoginController::class, 'login'])->name('employee.login');
 
 
 
@@ -223,6 +225,7 @@ Route::middleware(['auth:employee'])->group(function () {
         Route::get('/files/{file}/show', [FileController::class, 'show'])->name('files.show');  // Add this line
         Route::get('/request', [RequestController::class, 'index'])->name('request.index');
     });
+    Route::get('/record', [ServiceController::class, 'index']);
 
 
 });

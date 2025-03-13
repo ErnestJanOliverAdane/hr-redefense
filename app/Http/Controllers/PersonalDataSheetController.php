@@ -23,10 +23,15 @@ class PersonalDataSheetController extends Controller
     {
         $employee = Auth::guard('employee')->user();
         $personalInfo = PersonalInformationModel::where('employee_id', $employee->employee_id)->first();
-        
+
         if (!$personalInfo) {
+
             $personalInfo = PersonalInformationModel::create([
                 'employee_id' => $employee->employee_id,
+                'surname' => $employee->last_name ?? '',
+                'first_name' => $employee->first_name ?? '',
+                'middle_name' => $employee->middle_initial ?? '',
+
             ]);
         }
 
@@ -60,13 +65,13 @@ class PersonalDataSheetController extends Controller
             return redirect()->back()->with('error', 'Unable to load profile data.');
         }
     }
-    
+
     public function store(Request $request)
     {
         try {
 
             $existingRecord = PersonalInformationModel::where('employee_id', auth()->guard('employee')->user()->employee_id)
-             ->first();
+                ->first();
 
             if ($existingRecord) {
                 return redirect()->route('personal.data.sheet.update', $existingRecord->personal_information_id);
@@ -377,8 +382,8 @@ class PersonalDataSheetController extends Controller
                             'title' => $title,
                             'from_date' => $request->learning['from_date'][$key] ?? null,
                             'to_date' => $request->learning['to_date'][$key] ?? null,
-                            'hours' => $request->learning['number_of_hours'][$key] ?? null, 
-                            'type' => $request->learning['type_of_ld'][$key] ?? null, 
+                            'hours' => $request->learning['number_of_hours'][$key] ?? null,
+                            'type' => $request->learning['type_of_ld'][$key] ?? null,
                             'conducted_by' => $request->learning['conducted_by'][$key] ?? null
                         ]);
                     }
@@ -482,7 +487,7 @@ class PersonalDataSheetController extends Controller
 
             $personalInfo = PersonalInformationModel::findOrFail($personal_information_id);
 
-            $personalInfo->update ([
+            $personalInfo->update([
                 'surname' => $request->surname ?? $personalInfo->surname,
                 'first_name' => $request->first_name ?? $personalInfo->first_name,
                 'middle_name' => $request->middle_name,
@@ -588,10 +593,10 @@ class PersonalDataSheetController extends Controller
 
             foreach ($educationLevels as $requestKey => $dbValue) {
                 $schoolField = $requestKey . '_school';
-                
+
                 // Log the specific field we're checking
                 Log::info("Checking for {$schoolField}: " . ($request->has($schoolField) ? 'exists' : 'does not exist'));
-                
+
                 if ($request->filled($schoolField)) { // Use filled instead of has to check for non-empty values
                     try {
                         $educRecord = $personalInfo->educationalBackground()->create([
@@ -604,7 +609,7 @@ class PersonalDataSheetController extends Controller
                             'year_graduated' => $request->{$requestKey . '_year_graduated'},
                             'academic_honors' => $request->{$requestKey . '_honors'}
                         ]);
-                        
+
                         // Log successful creation
                         Log::info("Created educational record for level {$dbValue}", [
                             'record_id' => $educRecord->id,
@@ -618,12 +623,12 @@ class PersonalDataSheetController extends Controller
                 }
             }
 
-                    // Verify the records were created
-                    $verifyRecords = $personalInfo->fresh()->educationalBackground;
-                    Log::info('Educational records after update:', [
-                        'count' => $verifyRecords->count(),
-                        'records' => $verifyRecords->toArray()
-                    ]);
+            // Verify the records were created
+            $verifyRecords = $personalInfo->fresh()->educationalBackground;
+            Log::info('Educational records after update:', [
+                'count' => $verifyRecords->count(),
+                'records' => $verifyRecords->toArray()
+            ]);
 
             // Update Civil Service Eligibility
             if ($request->has('eligibility')) {
