@@ -16,7 +16,7 @@
                         @yield('content')
                     </div>
                 </div>
-                @extends('theme.footer')
+                @include('theme.footer')
             </div>
         </div>
     </div>

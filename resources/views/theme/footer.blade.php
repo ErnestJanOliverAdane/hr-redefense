@@ -21,6 +21,8 @@
         }
     }
 </script>
+
+
 <div class="nk-footer">
     <div class="container-fluid">
         <div class="nk-footer-wrap">

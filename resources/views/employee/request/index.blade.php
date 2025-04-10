@@ -81,6 +81,7 @@
                             </td>
                         </tr>
                         <!-- Date Started -->
+
                         <tr>
                             <td class="col-lg-5">
                                 <div class="form-group">
@@ -91,13 +92,28 @@
                             <td class="col-lg-7">
                                 <div class="form-control-wrap">
                                     <input type="date" class="form-control" id="inp_date_started" name="inp_date_started"
-                                        value="{{ old('inp_date_started') }}" required>
+                                        value="{{ old('inp_date_started', $dateStarted) }}" required readonly>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-lg-5">
+                                <div class="form-group">
+                                    <label class="form-label" for="inp_or">Position</label>
+                                    <span class="form-note">Specify the position here.</span>
+                                </div>
+                            </td>
+                            <td class="col-lg-7">
+                                <div class="form-control-wrap">
+                                    <input type="text" class="form-control" id="inp_or" name="inp_or"
+                                        placeholder="Enter OR here..." required>
                                 </div>
                             </td>
                         </tr>
 
+
                         <!-- Monthly Compensation -->
-                        <tr>
+                        {{-- <tr>
                             <td class="col-lg-5">
                                 <div class="form-group">
                                     <label class="form-label" for="ern_text">Monthly Compensation</label>
@@ -118,7 +134,7 @@
                                     </div>
                                 </div>
                             </td>
-                        </tr>
+                        </tr> --}}
                     </tbody>
 
                 </table>
@@ -130,8 +146,7 @@
                     PDFs.
                 </p>
                 <div class="form-group">
-                    <label class="form-label" for="inp_proof_payment">Proof of Payment <b
-                            class="text-danger">*</b></label>
+                    <label class="form-label" for="inp_proof_payment">Proof of Payment <b class="text-danger">*</b></label>
                     <div class="form-control-wrap">
                         <input type="file" class="form-control" id="inp_proof_payment" name="inp_proof_payment"
                             accept="image/*,application/pdf" required>

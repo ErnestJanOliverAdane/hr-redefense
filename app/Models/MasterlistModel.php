@@ -62,12 +62,12 @@ class MasterlistModel extends Authenticatable
         return $this->hasMany(RankModel::class, 'masterlist_id');
     }
 
-    
+
     public function getEmploymentType()
     {
         return $this->employment_status;
     }
-    
+
     public function personal_information()
     {
         return $this->hasOne(PersonalInformationModel::class, 'employee_id', 'employee_id');

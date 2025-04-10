@@ -28,7 +28,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\EmployeeReportController;
 use App\Models\MasterlistModel;
-use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\SOrequestController;
+use App\Http\Controllers\PromotionController;
+use App\Http\Controllers\ApromotionController;
 
 
 
@@ -79,6 +81,14 @@ Route::middleware(['auth:web'])->group(function () {
     //     return view('admin.ranks.index');
     // })->name('admin.ranks.index');
 
+
+    //Service Record only veiw
+    Route::get('/others/so', function () {
+        return view('admin.others.so');
+    })->name('admin.others.so');
+
+
+
     Route::get('/ccosreport', [EmployeeReportController::class, 'index'])->name('ccosreport.index');
     Route::get('/employee/export/excel', [EmployeeReportController::class, 'exportExcel'])->name('employee.export.excel');
 
@@ -108,6 +118,11 @@ Route::middleware(['auth:web'])->group(function () {
 
 
     });
+
+
+    //
+    Route::get('/sorequest/sorequeststatus', [SOrequestController::class, 'sostatusrequest'])->name('employee.sorequest.sorequeststatus');
+
 
     Route::get('/employee/{masterlistId}/files', [EmployeeController::class, 'getEmployeeFiles']);
 
@@ -146,14 +161,37 @@ Route::middleware(['auth:web'])->group(function () {
         Route::get('/approved', [OtherController::class, 'approved_requests'])->name('admin.others.Approve'); // Changed to match blade
         Route::get('/rejected', [OtherController::class, 'rejected_requests'])->name('admin.others.rejected');
 
-        // Action routes
+
+        // route sa pag pa display sa mga request sa mga fucking employee sa ilang so
+        Route::get('/sorequestlist', [OtherController::class, 'soindex'])->name('admin.others.sorequestlist');
+
+
+        Route::get('/so-request/{id}', [SOrequestController::class, 'show'])->name('so_request.view');
+
+
+
+        // route pag pa display sa mga approved na so request
+        Route::get('/soapprove', [OtherController::class, 'soapprovedrequests'])->name('admin.others.soapprove');
+
+
+        // route sa pag pag display sa mga reject na so request
+        Route::get('/soreject', [OtherController::class, 'sorejectedrequests'])->name('admin.others.soareject');
+
+
+        // approve og reject function route sa so
+        Route::put('/sorequest/{soreqid}/approve', [OtherController::class, 'soapprove'])->name('so_request.approve');
+        Route::put('/sorequest/{soreqid}/reject', [OtherController::class, 'soreject'])->name('so_request.reject');
+
+
+        // Action routes for COE requests
         Route::put('/request/{coe_id}/approve', [OtherController::class, 'approve'])->name('request.approve');
         Route::put('/request/{coe_id}/reject', [OtherController::class, 'reject'])->name('request.reject');
 
         // Edit routes
-
         Route::put('/request/{coe_id}', [OtherController::class, 'update'])->name('admin.others.update');
+
     });
+
     Route::get('/admin/others/{coe_id}/edit', [OtherController::class, 'edit'])->name('admin.others.edit');
     Route::put('/admin/others/{coe_id}', [OtherController::class, 'update'])->name('admin.others.update');
 
@@ -167,6 +205,17 @@ Route::middleware(['auth:web'])->group(function () {
         ]);
     });
     Route::get('/get-date-started/{employee_id}', [OtherController::class, 'getDateStarted']);
+
+
+    Route::get('/promote/request', [App\Http\Controllers\ApromotionController::class, 'index'])->name('admin.promotion.index');
+    Route::get('/promote/reject', [App\Http\Controllers\ApromotionController::class, 'rejected'])->name('admin.promotion.rejected');
+    Route::get('/promote/approve', [App\Http\Controllers\ApromotionController::class, 'approved'])->name('admin.promotion.approved');
+
+    Route::get('/promote/request/{id}', [App\Http\Controllers\ApromotionController::class, 'show'])->name('admin.promotion.show');
+    Route::post('/promote/request/approve/{id}', [App\Http\Controllers\ApromotionController::class, 'approveRequest'])->name('admin.promotion.approve');
+    Route::post('/promote/request/reject/{id}', [App\Http\Controllers\ApromotionController::class, 'rejectRequest'])->name('admin.promotion.reject');
+
+
 });
 
 
@@ -215,8 +264,14 @@ Route::middleware(['auth:employee'])->group(function () {
     Route::get('/personal-data-sheet/{personal_information_id}', [PersonalDataSheetController::class, 'edit'])->name('personal.data.sheet.edit');
     Route::post('/personal-data-sheet/{personal_information_id}/update', [PersonalDataSheetController::class, 'update'])->name('personal.data.sheet.update');
 
+    //coerequest
     Route::get('/request', [RequestController::class, 'index'])->name('request.index');
     Route::post('/request', [RequestController::class, 'store'])->name('request.store');
+
+    //sorequest
+    Route::get('/sorequest', [SOrequestController::class, 'index'])->name('sorequest.index');
+    Route::post('/sorequest', [SOrequestController::class, 'store'])->name('sorequest.store');
+
 
     Route::prefix('employee')->name('employee.')->group(function () {
         Route::get('/files', [FileController::class, 'index'])->name('files.index');
@@ -225,7 +280,8 @@ Route::middleware(['auth:employee'])->group(function () {
         Route::get('/files/{file}/show', [FileController::class, 'show'])->name('files.show');  // Add this line
         Route::get('/request', [RequestController::class, 'index'])->name('request.index');
     });
-    Route::get('/record', [ServiceController::class, 'index']);
 
+    Route::get('/promotion', [PromotionController::class, 'index']);
+    Route::post('/promotion/store', [PromotionController::class, 'store']);
 
 });

@@ -19,6 +19,7 @@ class RequestModel extends Model
         'MonthlyCompensationDigits',
         'proof_payment_path',
         'status',
+        'Or'
     ];
 
     const STATUS_PENDING = 'pending';

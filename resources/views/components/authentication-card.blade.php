@@ -1,7 +1,7 @@
 <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
     <div>
-        <a href="{{url ('/')}}">
-        <img src="{{asset('/TCC.png')}}" alt="Logo" class="w-50 h-50 object-cover">
+        <a href="{{ url('/') }}">
+            <img src="{{ asset('/TCC.png') }}" alt="Logo" class="w-50 h-50 object-cover">
         </a>
     </div>
 
@@ -9,4 +9,3 @@
         {{ $slot }}
     </div>
 </div>
-    

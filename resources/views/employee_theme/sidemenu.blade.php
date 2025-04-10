@@ -70,6 +70,33 @@
                         </ul>
                     </li>
 
+                    <li class="nk-menu-item has-sub">
+                        <a href="javascript:void(0);" class="nk-menu-link nk-menu-toggle">
+                            <span class="nk-menu-icon"><em class="icon ni ni-file-text"></em></span>
+                            <span class="nk-menu-text">Request SO</span>
+                        </a>
+                        <ul class="nk-menu-sub">
+                            <li class="nk-menu-item">
+                                <a href="/sorequest" class="nk-menu-link">
+                                    <span class="nk-menu-text">New Request</span>
+                                </a>
+                            </li>
+                            <li class="nk-menu-item">
+                                <a href="/sorequest/sorequeststatus" class="nk-menu-link">
+                                    <span class="nk-menu-text">Request Status</span>
+                                </a>
+                            </li>
+
+                        </ul>
+                    </li>
+                    @if (Auth::check() && Auth::user()->job_type == 'faculty')
+                        <li class="nk-menu-item">
+                            <a href="/promotion" class="nk-menu-link">
+                                <span class="nk-menu-icon"><em class="icon ni ni-trend-up"></em></span>
+                                <span class="nk-menu-text">Promotion request</span>
+                            </a>
+                        </li>
+                    @endif
                 </ul>
             </div>
         </div>

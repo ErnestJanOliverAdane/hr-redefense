@@ -26,6 +26,7 @@
                     <li class="nk-menu-heading pt-0">
                         <h6 class="overline-title text-primary-alt">menu</h6>
                     </li>
+
                     <li class="nk-menu-item">
                         <a href="/dashboard"class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-dashboard"></em></span>
@@ -33,22 +34,16 @@
                         </a>
                     </li>
 
+                    <li class="nk-menu-heading pt-0">
+                        <h6 class="overline-title text-primary-alt">EMPLOYEE MANAGEMENT</h6>
+                    </li>
+
+
                     <li class="nk-menu-item">
                         <a href="/addemployees" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-users"></em></span>
                             <span class="nk-menu-text">Add Employee</span>
                         </a>
-                    </li>
-                    {{-- <li class="nk-menu-item">
-                        <a href="/departments/register" class="nk-menu-link">
-                            <span class="nk-menu-icon"><em class="icon ni ni-users"></em></span>
-                            <span class="nk-menu-text">Add Department</span>
-                        </a>
-                    </li> --}}
-
-
-                    <li class="nk-menu-heading pt-0">
-                        <h6 class="overline-title text-primary-alt">EMPLOYEE MANAGE</h6>
                     </li>
 
                     <li class="nk-menu-item has-sub">
@@ -57,8 +52,6 @@
                             <span class="nk-menu-text" class="icon ni ni-tile-thumb-fill">Masterlist</span>
                         </a>
                     </li>
-
-
 
                     <li class="nk-menu-item has-sub">
                         <a href="#" class="nk-menu-link nk-menu-toggle">
@@ -86,13 +79,6 @@
                         </a>
 
                     </li>
-                    <li class="nk-menu-item">
-                        <a href="/record" class="nk-menu-link">
-                            <span class="nk-menu-icon"><em class="icon ni ni-reports"></em></span>
-                            <span class="nk-menu-text">Service Record</span>
-                        </a>
-
-                    </li>
 
                     <li class="nk-menu-heading pt-3">
                         <h6 class="overline-title text-primary-alt">OTHERS</h6>
@@ -103,6 +89,16 @@
                             <span class="nk-menu-icon"><em class="icon ni ni-task"></em></span>
                             <span class="nk-menu-text">COE</span>
                         </a>
+                    </li>
+                    <li class="nk-menu-item">
+                        <a href="/others/so" class="nk-menu-link">
+                            <span class="nk-menu-icon"><em class="icon ni ni-task"></em></span>
+                            <span class="nk-menu-text">SO</span>
+                        </a>
+                    </li>
+
+                    <li class="nk-menu-heading pt-3">
+                        <h6 class="overline-title text-primary-alt">REQUEST</h6>
                     </li>
 
                     <li class="nk-menu-item has-sub">
@@ -129,8 +125,71 @@
                         </ul>
                     </li>
 
+                    {{-- <li class="nk-menu-item has-sub">
+                        <a href="javascript:void(0);" class="nk-menu-link nk-menu-toggle">
+                            <span class="nk-menu-icon"><em class="icon ni ni-file"></em></span>
+                            <span class="nk-menu-text">SO Request</span>
+                        </a>
+                        <ul class="nk-menu-sub">
+                            <li class="nk-menu-item">
+                                <a href="/others/sorequestlist" class="nk-menu-link">
+                                    <span class="nk-menu-text">Request List</span>
+                                </a>
+                            </li>
+                            <li class="nk-menu-item">
+                                <a href="/others/soreject" class="nk-menu-link">
+                                    <span class="nk-menu-text">Rejected List</span>
+                                </a>
+                            </li>
+                            <li class="nk-menu-item">
+                                <a href="/others/soapprove" class="nk-menu-link">
+                                    <span class="nk-menu-text">Approved SO Request</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li> --}}
 
-
+                    <li class="nk-menu-item has-sub">
+                        <a href="javascript:void(0);" class="nk-menu-link nk-menu-toggle">
+                            <span class="nk-menu-icon"><em class="icon ni ni-file"></em></span>
+                            <span class="nk-menu-text">Promotion request</span>
+                            @if ($pendingPromotionCount > 0)
+                                <span class="nk-menu-indicator position-relative">
+                                    <em class="icon ni ni-chevron-right"></em>
+                                    <span class="position-absolute bg-danger rounded-circle"
+                                        style="width: 6px; height: 6px; top: 0; right: 0;"></span>
+                                </span>
+                            @else
+                                <span class="nk-menu-indicator">
+                                    <em class="icon ni ni-chevron-right"></em>
+                                </span>
+                            @endif
+                        </a>
+                        <ul class="nk-menu-sub">
+                            <li class="nk-menu-item">
+                                <a href="/promote/request" class="nk-menu-link">
+                                    <span class="nk-menu-text">Request List</span>
+                                    @if ($pendingPromotionCount > 0)
+                                        <span
+                                            class="badge badge-pill badge-primary ml-auto">{{ $pendingPromotionCount }}</span>
+                                    @endif
+                                </a>
+                            </li>
+                            <li class="nk-menu-item">
+                                <a href="/promote/reject" class="nk-menu-link">
+                                    <span class="nk-menu-text">Rejected List</span>
+                                </a>
+                            </li>
+                            <li class="nk-menu-item">
+                                <a href="/promote/approve" class="nk-menu-link">
+                                    <span class="nk-menu-text">Approved List</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nk-menu-heading pt-3">
+                        <h6 class="overline-title text-primary-alt">OVERALL REPORT</h6>
+                    </li>
                     <li class="nk-menu-item has-sub">
                         <a href="#" class="nk-menu-link nk-menu-toggle">
                             <span class="nk-menu-icon"><em class="icon ni ni-report"></em></span>
@@ -149,21 +208,8 @@
                                     <span class="nk-menu-text">JO/COS/MOA Reports</span>
                                 </a>
                             </li>
-                            <!-- <li class="nk-menu-item">
-                                <a href="/RankingRecord" class="nk-menu-link">
-                                    <span class="nk-menu-text">Ranking Report</span>
-                                </a>
-                            </li> -->
-
                         </ul>
                     </li>
-                    {{-- <li class="nk-menu-item">
-                        <a href="/record/daily" class="nk-menu-link">
-                            <span class="nk-menu-icon"><em class="icon ni ni-eye"></em></span>
-                            <span class="nk-menu-text">Activity Logs</span>
-                        </a>
-                    </li> --}}
-
                 </ul>
             </div>
         </div>

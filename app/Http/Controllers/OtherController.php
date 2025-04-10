@@ -5,16 +5,61 @@ namespace App\Http\Controllers;
 use App\Models\MasterlistModel;
 use Illuminate\Http\Request;
 use App\Models\RequestModel;
+use App\Models\SOrequestModel;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class OtherController extends Controller
 {
-    // public function index()
-    // {
-    //     $approvedRequests = RequestModel::all();
-    //     return view('admin.others.approve', compact('approvedRequests'));
-    // }
+    //tanan function sa so
+    public function soindex()
+    {
+        $so_requests = SOrequestModel::with('masterlist')
+            ->where('status', 'pending')
+            ->get();
+        return view('admin.others.sorequestlist', compact('so_requests'));
+    }
 
+    //
+
+    public function soapprove($soreqid)
+    {
+        $so_request = SOrequestModel::findOrFail($soreqid);
+        $so_request->update(['status' => 'approve']);
+        return back()->with('success', 'SO Request approved successfully');
+    }
+
+    //
+
+    public function soreject($soreqid)
+    {
+        $so_request = SOrequestModel::findOrFail($soreqid);
+        $so_request->update(['status' => 'reject']);
+        return back()->with('success', 'SO Request rejected successfully');
+    }
+
+    //
+
+    public function soapprovedrequests()
+    {
+        $so_requests = SOrequestModel::with('masterlist')
+                            ->where('status', 'approve')
+                            ->get();
+        return view('admin.others.soapprove', compact('so_requests'));
+    }
+
+    //
+
+    public function sorejectedrequests()
+    {
+        $so_requests = SOrequestModel::with('masterlist')
+                            ->where('status', 'reject')
+                            ->get();
+        return view('admin.others.soreject', compact('so_requests'));
+    }
+
+
+    //tanan function sa coe
     public function coe()
     {
         return view('admin.others.coe');
@@ -77,7 +122,7 @@ class OtherController extends Controller
     public function update(Request $request, $coe_id)
     {
         try {
-            \Log::info('Update request received for COE ID: ' . $coe_id, $request->all());
+            Log::info('Update request received for COE ID: ' . $coe_id, $request->all());
 
             $coeRequest = RequestModel::findOrFail($coe_id);
 
@@ -93,7 +138,7 @@ class OtherController extends Controller
 
             $coeRequest->update($validated);
 
-            \Log::info('Update successful for COE ID: ' . $coe_id);
+            Log::info('Update successful for COE ID: ' . $coe_id);
 
             return response()->json([
                 'success' => true,
@@ -101,7 +146,7 @@ class OtherController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            \Log::error('Error updating request COE ID ' . $coe_id . ': ' . $e->getMessage());
+            Log::error('Error updating request COE ID ' . $coe_id . ': ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Error updating certificate request: ' . $e->getMessage()
