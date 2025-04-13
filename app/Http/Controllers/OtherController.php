@@ -43,8 +43,8 @@ class OtherController extends Controller
     public function soapprovedrequests()
     {
         $so_requests = SOrequestModel::with('masterlist')
-                            ->where('status', 'approve')
-                            ->get();
+            ->where('status', 'approve')
+            ->get();
         return view('admin.others.soapprove', compact('so_requests'));
     }
 
@@ -53,8 +53,8 @@ class OtherController extends Controller
     public function sorejectedrequests()
     {
         $so_requests = SOrequestModel::with('masterlist')
-                            ->where('status', 'reject')
-                            ->get();
+            ->where('status', 'reject')
+            ->get();
         return view('admin.others.soreject', compact('so_requests'));
     }
 
@@ -71,6 +71,9 @@ class OtherController extends Controller
         $requests = RequestModel::where('status', 'pending')->get();
         return view('admin.others.request', compact('requests'));
     }
+
+
+
     public function approved_requests()
     {
         $approvedRequests = RequestModel::join('masterlist', function ($join) {
@@ -126,16 +129,32 @@ class OtherController extends Controller
 
             $coeRequest = RequestModel::findOrFail($coe_id);
 
-            $validated = $request->validate([
-                'FirstName' => 'required|string|max:255',
-                'LastName' => 'required|string|max:255',
-                'Email' => 'required|email|max:255',
-                'Position' => 'required|string|max:255',
-                'DateStarted' => 'required|date',
-                'MonthlyCompensationText' => 'required|string|max:255',
-                'MonthlyCompensationDigits' => 'required|numeric'
-            ]);
+            // For partial updates (like just updating compensation), we only validate
+            // the fields that were sent in the request
+            $validationRules = [];
 
+            if ($request->has('MonthlyCompensationText')) {
+                $validationRules['MonthlyCompensationText'] = 'required|string|max:255';
+            }
+
+            if ($request->has('MonthlyCompensationDigits')) {
+                $validationRules['MonthlyCompensationDigits'] = 'required|numeric|min:0';
+            }
+
+            // If we're updating all fields (from the full edit form)
+            if ($request->has('FirstName')) {
+                $validationRules = array_merge($validationRules, [
+                    'FirstName' => 'required|string|max:255',
+                    'LastName' => 'required|string|max:255',
+                    'Email' => 'required|email|max:255',
+                    'Position' => 'required|string|max:255',
+                    'DateStarted' => 'required|date'
+                ]);
+            }
+
+            $validated = $request->validate($validationRules);
+
+            // Update only the fields that were validated
             $coeRequest->update($validated);
 
             Log::info('Update successful for COE ID: ' . $coe_id);

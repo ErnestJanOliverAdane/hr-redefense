@@ -99,8 +99,8 @@
                         <tr>
                             <td class="col-lg-5">
                                 <div class="form-group">
-                                    <label class="form-label" for="inp_or">Position</label>
-                                    <span class="form-note">Specify the position here.</span>
+                                    <label class="form-label" for="inp_or">O.R</label>
+                                    <span class="form-note">Specify the O.R here.</span>
                                 </div>
                             </td>
                             <td class="col-lg-7">

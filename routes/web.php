@@ -48,7 +48,7 @@ Route::middleware(['auth:web'])->group(function () {
     })->name('admin.dashboard');
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
-    Route::get('/addemployees', [AddEmployeeController::class, 'index'])->name('employee.index');
+    Route::get('/addemployees', [AddEmployeeController::class, 'index'])->name('addemployees.index');
     // Route::get('/addemployees', [AddEmployeeController::class, 'showForm'])->name('employee.index');
     Route::post('/employee/registration', [AddEmployeeController::class, 'store'])->name('employee.save');
     Route::post('/addemployees/save', [AddEmployeeController::class, 'store'])->name('addemployees.save');
@@ -189,6 +189,8 @@ Route::middleware(['auth:web'])->group(function () {
 
         // Edit routes
         Route::put('/request/{coe_id}', [OtherController::class, 'update'])->name('admin.others.update');
+
+        Route::put('/others/request/{coe_id}', [OtherController::class, 'update'])->name('request.update');
 
     });
 

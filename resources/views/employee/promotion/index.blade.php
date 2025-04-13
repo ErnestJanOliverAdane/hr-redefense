@@ -78,7 +78,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label">Current Qualification</label>
+                            <label class="form-label"> Qualification</label>
                             <select name="current_qua" id="qualificationSelect" class="form-control" required>
                                 <option value="">Select Qualification</option>
                                 <option value="6-12 units earned, Master's Degree">6-12 units earned, Master's Degree

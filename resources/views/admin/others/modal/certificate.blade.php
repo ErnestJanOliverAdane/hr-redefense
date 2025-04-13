@@ -252,8 +252,11 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" onclick="window.print()">Print Certificate</button>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info text-white edit-modal-btn">Edit</button>
+                    <button type="button" class="btn btn-primary" onclick="window.print()">Print Certificate</button>
+                </div>
             </div>
         </div>
     </div>

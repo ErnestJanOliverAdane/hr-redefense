@@ -81,6 +81,7 @@ class RankController extends Controller
                         'field' => $request->input('updated_field'),
                         'current_qua' => $request->input('updated_qua'),
                         'current_rank' => $request->input('updated_rank'),
+                        'requested_rank' => $request->input('updated_rank'), // Store the final rank designation in requested_rank
                         'updated_field' => $oldField != $request->input('updated_field') ? $oldField : $request->input('updated_field'),
                         'updated_qua' => $oldQualification != $request->input('updated_qua') ? $oldQualification : $request->input('updated_qua'),
                         'updated_rank' => $oldRank != $request->input('updated_rank') ? $oldRank : $request->input('updated_rank'),
@@ -94,6 +95,7 @@ class RankController extends Controller
                     'field' => $request->input('updated_field'),
                     'current_qua' => $request->input('updated_qua'),
                     'current_rank' => $request->input('updated_rank'),
+                    'requested_rank' => $request->input('updated_rank'), // Store the final rank designation in requested_rank
                     'updated_field' => $oldField ?: $request->input('updated_field'),
                     'updated_qua' => $oldQualification ?: $request->input('updated_qua'),
                     'updated_rank' => $oldRank ?: $request->input('updated_rank'),

@@ -13,9 +13,10 @@ class RequestController extends Controller
     public function index()
     {
 
+
         $coe = RequestModel::all();
         $employee = Auth::user();
-        $masterlist = MasterlistModel::where('job_title', $employee->job_title)->first();
+        $masterlist = MasterlistModel::where('employee_id', $employee->employee_id)->first();
         $dateStarted = $masterlist ? $masterlist->created_at->format('Y-m-d') : '';
         $personalInformation = $employee->personal_information;
         return view('employee.request.index', compact('coe', 'employee', 'personalInformation', 'masterlist', 'dateStarted'));
@@ -42,7 +43,7 @@ class RequestController extends Controller
             'inp_email' => 'required|email',
             'inp_position' => 'nullable|string|max:50',
             'inp_date_started' => 'nullable|date',
-            'inp_or' => 'nullable|string|max:50',
+            'inp_or' => 'required|string|max:50',
             'inp_proof_payment' => 'required|file|mimes:jpg,png,pdf|max:5120', // 5MB max
         ]);
 
@@ -68,7 +69,7 @@ class RequestController extends Controller
                 'Email' => $validated['inp_email'],
                 'Position' => $validated['inp_position'],
                 'DateStarted' => $validated['inp_date_started'],
-                'Or' => $validated['inp_or'],
+                'or_number' => $validated['inp_or'],
                 'proof_payment_path' => $path ?? $existingRequest->proof_payment_path,
             ]);
         } else {
@@ -80,7 +81,7 @@ class RequestController extends Controller
                 'Email' => $validated['inp_email'],
                 'Position' => $validated['inp_position'],
                 'DateStarted' => $validated['inp_date_started'],
-                'Or' => $validated['inp_or'],
+                'or_number' => $validated['inp_or'],
                 'proof_payment_path' => $path ?? null,
                 'status' => 'pending',
             ]);

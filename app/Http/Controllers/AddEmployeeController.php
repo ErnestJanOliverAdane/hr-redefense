@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Models\DepartmentModel;
 use App\Models\MasterlistModel;
+use App\Models\RankingModel; // Added for faculty ranking
 use Illuminate\Http\Request;
 
 class AddEmployeeController extends Controller
@@ -76,15 +77,27 @@ class AddEmployeeController extends Controller
                 'plain_password' => $password,
             ];
 
-            // Add faculty-specific fields if job type is Faculty
-            if ($validatedData['job_type'] === 'Faculty') {
-                $employeeData['current_rank'] = $validatedData['current_rank'];
-                $employeeData['current_qual'] = $validatedData['current_qual'];
-                $employeeData['current_field'] = $validatedData['current_field'];
-            }
-
             // Save the employee
-            MasterlistModel::create($employeeData);
+            $employee = MasterlistModel::create($employeeData);
+
+            // Add faculty-specific fields to the ranking table if job type is Faculty
+            if ($validatedData['job_type'] === 'Faculty') {
+                $rankingData = [
+                    'masterlist_id' => $employee->id,
+                    'employee_id' => $employeeId,
+                    'field' => $validatedData['current_field'],
+                    'updated_field' => $validatedData['current_field'],
+                    'current_qua' => $validatedData['current_qual'],
+                    'updated_qua' => $validatedData['current_qual'],
+                    'requested_rank' => $validatedData['current_rank'],
+                    'status' => 'approved',
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ];
+
+                // Save to tbl_ranking
+                DB::table('tbl_ranking')->insert($rankingData);
+            }
 
             return redirect()->route('addemployees.index')
                 ->with('success', "Employee added successfully. Password: $password");

@@ -229,66 +229,119 @@
                             </div>
                         </div>
 
+                        <!-- Updated Faculty Fields Section -->
                         <div id="faculty-fields" style="display: none;">
-                        <!-- Current Rank -->
-                        <div class="row mt-2 align-center">
-                            <div class="col-lg-5">
-                                <div class="form-group">
-                                    <label class="form-label" for="current_rank"> Rank <b class="text-danger">*</b></label>
-                                    <span class="form-note">Select the rank.</span>
+                            <!-- Update Field Input (Field of Study) -->
+                            <div class="row mt-2 align-center">
+                                <div class="col-lg-5">
+                                    <div class="form-group">
+                                        <label class="form-label" for="current_field">Field (Field of Study) <b
+                                                class="text-danger">*</b></label>
+                                        <span class="form-note">Specify the field of study.</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-7">
+                                    <select id="current_field" name="current_field" class="form-control">
+                                        <option value="">Select Field of Study</option>
+                                        <option value="Accountancy">Accountancy</option>
+                                        <option value="Agriculture">Agriculture</option>
+                                        <option value="Architecture">Architecture</option>
+                                        <option value="Biology">Biology</option>
+                                        <option value="Business Administration">Business Administration</option>
+                                        <option value="Chemistry">Chemistry</option>
+                                        <option value="Computer Science">Computer Science</option>
+                                        <option value="Economics">Economics</option>
+                                        <option value="Education">Education</option>
+                                        <option value="Engineering">Engineering</option>
+                                        <option value="Environmental Science">Environmental Science</option>
+                                        <option value="Finance">Finance</option>
+                                        <option value="Fine Arts">Fine Arts</option>
+                                        <option value="Forestry">Forestry</option>
+                                        <option value="Health Sciences">Health Sciences</option>
+                                        <option value="History">History</option>
+                                        <option value="Hospitality Management">Hospitality Management</option>
+                                        <option value="Information Technology">Information Technology</option>
+                                        <option value="Law">Law</option>
+                                        <option value="Literature">Literature</option>
+                                        <option value="Management">Management</option>
+                                        <option value="Marine Science">Marine Science</option>
+                                        <option value="Mathematics">Mathematics</option>
+                                        <option value="Medicine">Medicine</option>
+                                        <option value="Music">Music</option>
+                                        <option value="Nursing">Nursing</option>
+                                        <option value="Nutrition">Nutrition</option>
+                                        <option value="Pharmacy">Pharmacy</option>
+                                        <option value="Philosophy">Philosophy</option>
+                                        <option value="Physical Education">Physical Education</option>
+                                        <option value="Physics">Physics</option>
+                                        <option value="Political Science">Political Science</option>
+                                        <option value="Psychology">Psychology</option>
+                                        <option value="Public Administration">Public Administration</option>
+                                        <option value="Social Sciences">Social Sciences</option>
+                                        <option value="Social Work">Social Work</option>
+                                        <option value="Sociology">Sociology</option>
+                                        <option value="Statistics">Statistics</option>
+                                        <option value="Tourism">Tourism</option>
+                                        <option value="Veterinary Medicine">Veterinary Medicine</option>
+                                    </select>
                                 </div>
                             </div>
-                            <div class="col-lg-7">
-                                <select class="form-control" id="current_rank" name="current_rank">
-                                    <option value="">Select Rank</option>
-                                    <option value="Instructor I">Instructor I</option>
-                                    <option value="Instructor II">Instructor II</option>
-                                    <option value="Instructor III">Instructor III</option>
-                                    <option value="Assistant Professor I">Assistant Professor I</option>
-                                    <option value="Assistant Professor II">Assistant Professor II</option>
-                                    <option value="Assistant Professor III">Assistant Professor III</option>
-                                    <option value="Associate Professor I">Associate Professor I</option>
-                                    <option value="Associate Professor II">Associate Professor II</option>
-                                    <option value="Associate Professor III">Associate Professor III</option>
-                                    <option value="Professor I">Professor I</option>
-                                    <option value="Professor II">Professor II</option>
-                                    <option value="Professor III">Professor III</option>
-                                </select>
+
+                            <!-- Update Qualification Dropdown (Indicator) -->
+                            <div class="row mt-2 align-center">
+                                <div class="col-lg-5">
+                                    <div class="form-group">
+                                        <label class="form-label" for="current_qual">Qualification (Indicator) <b
+                                                class="text-danger">*</b></label>
+                                        <span class="form-note">Specify the qualification.</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-7">
+                                    <select id="current_qual" name="current_qual" class="form-control">
+                                        <option value="">Select Indicator</option>
+                                        <option value="6-12 units earned, Master's Degree">6-12 units earned, Master's
+                                            Degree</option>
+                                        <option value="15-18 units earned, Master's Degree">15-18 units earned, Master's
+                                            Degree</option>
+                                        <option value="24-33 units earned, Master's Degree, Engineer, Medical Doctor">24-33
+                                            units earned, Master's Degree, Engineer, Medical Doctor</option>
+                                        <option value="CAR, Master's Degree">CAR, Master's Degree</option>
+                                        <option
+                                            value="Full-fledged Master's Degree with 5 yrs of relevant experience, CPA">
+                                            Full-fledged Master's Degree with 5 yrs of relevant experience, CPA</option>
+                                        <option value="Full-fledged Master's Degree with at least 9 units in PhD or DM">
+                                            Full-fledged Master's Degree with at least 9 units in PhD or DM</option>
+                                        <option value="Full-fledged Doctors, Juris Doctors, Lawyers">Full-fledged Doctors,
+                                            Juris Doctors, Lawyers</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Current Rank -->
+                            <div class="row mt-2 align-center">
+                                <div class="col-lg-5">
+                                    <div class="form-group">
+                                        <label class="form-label" for="current_rank">Final Rank Designation <b
+                                                class="text-danger">*</b></label>
+                                        <span class="form-note">Select the rank.</span>
+                                    </div>
+                                </div>
+                                <div class="col-lg-7">
+                                    <select class="form-control" id="current_rank" name="current_rank">
+                                        <option value="">Select Final Rank</option>
+                                        <option value="Instructor I">Instructor I</option>
+                                        <option value="Instructor II">Instructor II</option>
+                                        <option value="Instructor III">Instructor III</option>
+                                        <option value="Assistant Professor I">Assistant Professor I</option>
+                                        <option value="Assistant Professor II">Assistant Professor II</option>
+                                        <option value="Assistant Professor III">Assistant Professor III
+                                        </option>
+                                        <option value="Assistant Professor IV">Assistant Professor IV</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
 
-                        <!-- Current Qualification -->
-                        <div class="row mt-2 align-center">
-                            <div class="col-lg-5">
-                                <div class="form-group">
-                                    <label class="form-label" for="current_qual"> Qualification <b class="text-danger">*</b></label>
-                                    <span class="form-note">Specify the qualification.</span>
-                                </div>
-                            </div>
-                            <div class="col-lg-7">
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="current_qual" name="current_qual" 
-                                        placeholder="Enter Qualification...">
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Current Field -->
-                        <div class="row mt-2 align-center">
-                            <div class="col-lg-5">
-                                <div class="form-group">
-                                    <label class="form-label" for="current_field"> Field <b class="text-danger">*</b></label>
-                                    <span class="form-note">Specify the field.</span>
-                                </div>
-                            </div>
-                            <div class="col-lg-7">
-                                <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="current_field" name="current_field" 
-                                        placeholder="Enter Field...">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                         <!-- Submit Button -->
                         <div class="row mt-4">
@@ -303,6 +356,54 @@
                     </form>
 
 
+                    <!-- Add auto-select rank based on qualification JavaScript -->
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function() {
+                            // Auto-select rank based on qualification
+                            document.getElementById('current_qual').addEventListener('change', function() {
+                                const qualification = this.value;
+                                let suggestedRank = '';
+
+                                // Map qualifications to appropriate ranks
+                                switch (qualification) {
+                                    case '6-12 units earned, Master\'s Degree':
+                                        suggestedRank = 'Instructor I';
+                                        break;
+                                    case '15-18 units earned, Master\'s Degree':
+                                        suggestedRank = 'Instructor II';
+                                        break;
+                                    case '24-33 units earned, Master\'s Degree, Engineer, Medical Doctor':
+                                        suggestedRank = 'Instructor III';
+                                        break;
+                                    case 'CAR, Master\'s Degree':
+                                        suggestedRank = 'Assistant Professor I';
+                                        break;
+                                    case 'Full-fledged Master\'s Degree with 5 yrs of relevant experience, CPA':
+                                        suggestedRank = 'Assistant Professor II';
+                                        break;
+                                    case 'Full-fledged Master\'s Degree with at least 9 units in PhD or DM':
+                                        suggestedRank = 'Assistant Professor III';
+                                        break;
+                                    case 'Full-fledged Doctors, Juris Doctors, Lawyers':
+                                        suggestedRank = 'Assistant Professor IV';
+                                        break;
+                                    default:
+                                        suggestedRank = '';
+                                }
+
+                                // Set the suggested rank in the dropdown
+                                if (suggestedRank) {
+                                    const rankDropdown = document.getElementById('current_rank');
+                                    for (let i = 0; i < rankDropdown.options.length; i++) {
+                                        if (rankDropdown.options[i].value === suggestedRank) {
+                                            rankDropdown.options[i].selected = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            });
+                        });
+                    </script>
 
                     <script>
                         function filterPositionOptions() {
@@ -325,24 +426,25 @@
 
 
                     <script>
-                    document.getElementById('job_type').addEventListener('change', function() {
-                        const facultyFields = document.getElementById('faculty-fields');
-                        const facultyInputs = facultyFields.querySelectorAll('input, select');
-                        
-                        if (this.value === 'Faculty') {
-                            facultyFields.style.display = 'block';
-                            facultyInputs.forEach(input => {
-                                input.setAttribute('required', 'required');
-                            });
-                        } else {
-                            facultyFields.style.display = 'none';
-                            facultyInputs.forEach(input => {
-                                input.removeAttribute('required');
-                                input.value = '';
-                            });
-                        }
-                    });</script>
-                    
+                        document.getElementById('job_type').addEventListener('change', function() {
+                            const facultyFields = document.getElementById('faculty-fields');
+                            const facultyInputs = facultyFields.querySelectorAll('input, select');
+
+                            if (this.value === 'Faculty') {
+                                facultyFields.style.display = 'block';
+                                facultyInputs.forEach(input => {
+                                    input.setAttribute('required', 'required');
+                                });
+                            } else {
+                                facultyFields.style.display = 'none';
+                                facultyInputs.forEach(input => {
+                                    input.removeAttribute('required');
+                                    input.value = '';
+                                });
+                            }
+                        });
+                    </script>
+
 
                 </div>
             @endsection
