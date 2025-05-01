@@ -33,7 +33,8 @@ class MasterlistModel extends Authenticatable
         'plain_password',
         'rank',
         'qualification',
-        'field'
+        'field',
+        'employment_type'
     ];
 
     protected $hidden = [
@@ -44,6 +45,7 @@ class MasterlistModel extends Authenticatable
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
+        'disabled_at' => 'datetime',
         'date' => 'datetime'
     ];
 

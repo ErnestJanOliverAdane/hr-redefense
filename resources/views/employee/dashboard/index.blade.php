@@ -57,10 +57,15 @@
                                     <div class="card bg-light">
                                         <div class="card-inner">
                                             <h6 class="card-title">Status</h6>
-                                            <span class="badge bg-success">Active</span>
+                                            @if (auth()->user()->employment_type === 'disabled')
+                                                <span class="badge bg-danger">Disabled</span>
+                                            @else
+                                                <span class="badge bg-success">Active</span>
+                                            @endif
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
 
                             <!-- Additional Details -->

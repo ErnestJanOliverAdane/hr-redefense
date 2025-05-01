@@ -149,12 +149,14 @@ class ApromotionController extends Controller
     /**
      * Approve a promotion request
      */
-    /**
-     * Approve a promotion request
-     */
     public function approveRequest(Request $request, $id)
     {
         try {
+            // Validate if attachments have been reviewed
+            if ($request->attachments_reviewed !== 'true') {
+                return redirect()->back()->with('error', 'All attachments must be reviewed before approval');
+            }
+
             DB::beginTransaction();
 
             // Find the request in tbl_ranking
@@ -182,11 +184,12 @@ class ApromotionController extends Controller
                 'masterlist_id' => $promotionRequest->masterlist_id,
                 'employee_id' => $employeeId,
                 'previous_rank' => $promotionRequest->current_rank,
-                'current_rank' => $promotionRequest->current_rank, // Add this line
+                'current_rank' => $promotionRequest->current_rank,
                 'current_qua' => $promotionRequest->current_qua,
                 'requested_rank' => $promotionRequest->requested_rank,
                 'justification' => $promotionRequest->justification,
                 'certificate_path' => $promotionRequest->certificate_path,
+                'cert_earning_units_path' => $promotionRequest->cert_earning_units_path,
                 'tor_path' => $promotionRequest->tor_path,
                 'status' => 'approved',
                 'remarks' => $request->remarks,
@@ -194,10 +197,14 @@ class ApromotionController extends Controller
                 'updated_at' => now()
             ]);
 
+            // Log this action
+            \Log::info('Promotion request ' . $id . ' approved by user ID: ' . auth()->id());
+
             DB::commit();
             return redirect()->route('admin.promotion.index')->with('success', 'Promotion request approved successfully');
         } catch (\Exception $e) {
             DB::rollBack();
+            \Log::error('Failed to approve promotion request: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to approve promotion request: ' . $e->getMessage());
         }
     }
@@ -231,11 +238,12 @@ class ApromotionController extends Controller
                 'masterlist_id' => $promotionRequest->masterlist_id,
                 'employee_id' => $employeeId,
                 'previous_rank' => $promotionRequest->current_rank,
-                'current_rank' => $promotionRequest->current_rank, // Add this line
+                'current_rank' => $promotionRequest->current_rank,
                 'current_qua' => $promotionRequest->current_qua,
                 'requested_rank' => $promotionRequest->requested_rank,
                 'justification' => $promotionRequest->justification,
                 'certificate_path' => $promotionRequest->certificate_path,
+                'cert_earning_units_path' => $promotionRequest->cert_earning_units_path,
                 'tor_path' => $promotionRequest->tor_path,
                 'status' => 'rejected',
                 'remarks' => $request->remarks,
@@ -243,10 +251,14 @@ class ApromotionController extends Controller
                 'updated_at' => now()
             ]);
 
+            // Log this action
+            \Log::info('Promotion request ' . $id . ' rejected by user ID: ' . auth()->id());
+
             DB::commit();
             return redirect()->route('admin.promotion.index')->with('success', 'Promotion request rejected successfully');
         } catch (\Exception $e) {
             DB::rollBack();
+            \Log::error('Failed to reject promotion request: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to reject promotion request: ' . $e->getMessage());
         }
     }

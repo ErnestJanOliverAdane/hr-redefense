@@ -47,14 +47,6 @@
                                                 id="compensation-edit-{{ $request->coe_id }}">
                                                 <div class="row g-2">
                                                     <div class="col-md-6">
-                                                        <label for="compensation-text-{{ $request->coe_id }}"
-                                                            class="form-label">Amount in Words</label>
-                                                        <input type="text" class="form-control"
-                                                            id="compensation-text-{{ $request->coe_id }}"
-                                                            value="{{ $request->MonthlyCompensationText }}"
-                                                            placeholder="Text (e.g. Twenty Thousand)">
-                                                    </div>
-                                                    <div class="col-md-6">
                                                         <label for="compensation-digits-{{ $request->coe_id }}"
                                                             class="form-label">Amount in Numbers</label>
                                                         <div class="input-group">
@@ -66,6 +58,14 @@
                                                                 placeholder="Amount"
                                                                 onchange="generateAmountInWords({{ $request->coe_id }})">
                                                         </div>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <label for="compensation-text-{{ $request->coe_id }}"
+                                                            class="form-label">Amount in Words</label>
+                                                        <input type="text" class="form-control"
+                                                            id="compensation-text-{{ $request->coe_id }}"
+                                                            value="{{ $request->MonthlyCompensationText }}"
+                                                            placeholder="Text (e.g. Twenty Thousand)">
                                                     </div>
                                                     <div class="col-12 mt-3">
                                                         <button type="button"

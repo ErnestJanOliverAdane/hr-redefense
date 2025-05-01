@@ -213,14 +213,13 @@
 
                 <div class="right">
                     <p>Tel No. (088) 890-4324</p>
-                    <p>Email: hrmo.lgutigoloan@gmail.com</p>
+                    <p>Email: hrmo.lgutigoloan@gmail.com</ </div>
+
+                    <div class="clearfix"></div>
                 </div>
-
-                <div class="clearfix"></div>
             </div>
-        </div>
 
-        <button class="print-button" onclick="printDocument()">Print Certificate</button>
+            <button class="print-button" onclick="printDocument()">Print Certificate</button>
 
     </body>
 

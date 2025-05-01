@@ -31,6 +31,7 @@ use App\Models\MasterlistModel;
 use App\Http\Controllers\SOrequestController;
 use App\Http\Controllers\PromotionController;
 use App\Http\Controllers\ApromotionController;
+use App\Http\Controllers\SettingsController;
 
 
 
@@ -218,6 +219,13 @@ Route::middleware(['auth:web'])->group(function () {
     Route::post('/promote/request/reject/{id}', [App\Http\Controllers\ApromotionController::class, 'rejectRequest'])->name('admin.promotion.reject');
 
 
+    Route::get('/settings', [SettingsController::class, 'index']);
+    Route::patch('/faculty/{id}/toggle', [SettingsController::class, 'toggleStatus'])->name('faculty.toggle');
+
+
+
+
+
 });
 
 
@@ -284,6 +292,7 @@ Route::middleware(['auth:employee'])->group(function () {
     });
 
     Route::get('/promotion', [PromotionController::class, 'index']);
+    Route::get('/promotion/status', [PromotionController::class, 'status']);
     Route::post('/promotion/store', [PromotionController::class, 'store']);
 
 });

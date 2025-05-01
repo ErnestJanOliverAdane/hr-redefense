@@ -90,12 +90,12 @@
                             <span class="nk-menu-text">COE</span>
                         </a>
                     </li>
-                    <li class="nk-menu-item">
+                    {{-- <li class="nk-menu-item">
                         <a href="/others/so" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-task"></em></span>
                             <span class="nk-menu-text">SO</span>
                         </a>
-                    </li>
+                    </li> --}}
 
                     <li class="nk-menu-heading pt-3">
                         <h6 class="overline-title text-primary-alt">REQUEST</h6>
@@ -208,6 +208,29 @@
                                     <span class="nk-menu-text">JO/COS/MOA Reports</span>
                                 </a>
                             </li>
+                        </ul>
+                    </li>
+                    <li class="nk-menu-heading pt-3">
+                        <h6 class="overline-title text-primary-alt">Account</h6>
+                    </li>
+                    <li class="nk-menu-item has-sub">
+                        <a href="#" class="nk-menu-link nk-menu-toggle">
+                            <span class="nk-menu-icon"><em class="icon ni ni-account-setting"></em></span>
+                            <span class="nk-menu-text">Settings</span>
+                        </a>
+
+                        <ul class="nk-menu-sub">
+
+                            <li class="nk-menu-item">
+                                <a href="/settings" class="nk-menu-link">
+                                    <span class="nk-menu-text">Manage Faculty Accounts</span>
+                                </a>
+                            </li>
+                            {{-- <li class="nk-menu-item">
+                                <a href="/jocosmoareport" class="nk-menu-link">
+                                    <span class="nk-menu-text">JO/COS/MOA Reports</span>
+                                </a>
+                            </li> --}}
                         </ul>
                     </li>
                 </ul>

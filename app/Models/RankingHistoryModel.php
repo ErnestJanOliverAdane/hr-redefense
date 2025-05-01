@@ -30,6 +30,7 @@ class RankingHistoryModel extends Model
         'requested_rank',
         'justification',
         'certificate_path',
+        'cert_earning_units_path',
         'tor_path',
         'status',
         'remarks'

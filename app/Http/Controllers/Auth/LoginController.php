@@ -30,7 +30,7 @@ class LoginController extends Controller
             $employee = MasterlistModel::where('employee_id', $request->employee_id)->first();
 
             if ($employee && Hash::check($request->password, $employee->password)) {
-                Auth::guard('masterlist')->login($employee);
+                Auth::guard('masterlist')->login(user: $employee);
                 $request->session()->regenerate();
                 return redirect()->intended('employee/dashboard');
             }

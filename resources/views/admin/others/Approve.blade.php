@@ -33,7 +33,7 @@
                                         <td>{{ $request->FirstName }} {{ $request->LastName }}</td>
                                         <td>{{ $request->Email }}</td>
                                         <td>{{ $request->Position }}</td>
-                                        <td>{{ $request->created_at->format('F d, Y') }}</td>
+                                        <td>{{ $request->date_started_formatted }}</td>
                                         <td>
                                             {{ $request->MonthlyCompensationText }}
                                             (Php {{ number_format($request->MonthlyCompensationDigits, 2) }})
@@ -50,7 +50,8 @@
                                                 data-name="{{ $request->FirstName }} {{ $request->LastName }}"
                                                 data-email="{{ $request->Email }}"
                                                 data-position="{{ $request->Position }}"
-                                                data-date="{{ $request->created_at->format('F d, Y') }}"
+                                                data-date="{{ $request->date_started_formatted }}"
+                                                data-raw-date="{{ $request->date_started_raw }}"
                                                 data-firstname="{{ $request->FirstName }}"
                                                 data-lastname="{{ $request->LastName }}"
                                                 data-or-number="{{ $request->or_number }}"
@@ -117,17 +118,7 @@
                                                     </div>
                                                 </div>
                                                 <!-- Fixed: Removed duplicate Monthly Compensation fields -->
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <label class="form-label" for="edit-MonthlyCompensationText">Monthly
-                                                            Compensation (Text)</label>
-                                                        <input type="text" class="form-control"
-                                                            id="edit-MonthlyCompensationText" name="MonthlyCompensationText"
-                                                            required readonly>
-                                                        <small class="form-text text-muted">Auto-generated from the
-                                                            amount</small>
-                                                    </div>
-                                                </div>
+
                                                 <div class="col-md-6">
                                                     <div class="form-group">
                                                         <label class="form-label"
@@ -142,6 +133,18 @@
                                                         </div>
                                                         <small class="form-text text-muted">The text will be generated
                                                             automatically</small>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group">
+                                                        <label class="form-label"
+                                                            for="edit-MonthlyCompensationText">Monthly
+                                                            Compensation (Text)</label>
+                                                        <input type="text" class="form-control"
+                                                            id="edit-MonthlyCompensationText"
+                                                            name="MonthlyCompensationText" required readonly>
+                                                        <small class="form-text text-muted">Auto-generated from the
+                                                            amount</small>
                                                     </div>
                                                 </div>
                                             </div>
@@ -198,8 +201,11 @@
                 document.getElementById('edit-Email').value = buttonElement.getAttribute('data-email');
                 document.getElementById('edit-Position').value = buttonElement.getAttribute(
                     'data-position');
+
+                // Use the raw date (YYYY-MM-DD format) for the date input
                 document.getElementById('edit-DateStarted').value = buttonElement.getAttribute(
-                    'data-date');
+                    'data-raw-date');
+
                 document.getElementById('edit-MonthlyCompensationText').value = buttonElement
                     .getAttribute('data-compensation-text');
                 document.getElementById('edit-MonthlyCompensationDigits').value = buttonElement
@@ -216,7 +222,6 @@
                 });
             });
 
-            // Handle form submission
             document.getElementById('editForm').addEventListener('submit', function(e) {
                 e.preventDefault();
 
@@ -271,6 +276,8 @@
         });
 
         // Global function to show certificate modal (accessible via onclick)
+        // Update the showCertificateModal function to properly display the created_at date
+
         function showCertificateModal(btnElement) {
             try {
                 const data = {
@@ -278,6 +285,7 @@
                     name: btnElement.getAttribute('data-name'),
                     position: btnElement.getAttribute('data-position'),
                     startDate: btnElement.getAttribute('data-date'),
+                    rawDate: btnElement.getAttribute('data-raw-date'),
                     compensation: btnElement.getAttribute('data-compensation'),
                     orNumber: btnElement.getAttribute('data-or-number'),
                     compensationText: btnElement.getAttribute('data-compensation-text'),
@@ -327,7 +335,8 @@
                     editBtn.setAttribute('data-lastname', data.lastname);
                     editBtn.setAttribute('data-email', data.email);
                     editBtn.setAttribute('data-position', data.position);
-                    editBtn.setAttribute('data-date', data.startDate.replace(/^([A-Za-z]+ \d+, )/, ''));
+                    editBtn.setAttribute('data-date', data.startDate);
+                    editBtn.setAttribute('data-raw-date', data.rawDate);
                     editBtn.setAttribute('data-compensation-text', data.compensationText || '');
                     editBtn.setAttribute('data-compensation-digits', data.compensationDigits || '');
                 }

@@ -417,20 +417,70 @@
                 }
             });
         });
-
-
         $(document).ready(function() {
+            // ==================================================
+            // REQUIRED FIELD HANDLING
+            // ==================================================
+
+            // Make sure the field is required in the HTML by adding the attribute
+            $('#updated_rank').attr('required', 'required');
+            $('#updateQualification').attr('required', 'required');
+
+            // Add visual indication of required fields (asterisks)
+            if (!$('label[for="updated_rank"]').find('.text-danger').length) {
+                $('label[for="updated_rank"]').append('<span class="text-danger ms-1">*</span>');
+            }
+
+            if (!$('label[for="updateQualification"]').find('.text-danger').length) {
+                $('label[for="updateQualification"]').append('<span class="text-danger ms-1">*</span>');
+            }
+
+            // ==================================================
+            // QUALIFICATION HIERARCHY ENFORCEMENT
+            // ==================================================
+
+            // Variables to store current qualification and rank
+            let currentQualification = '';
+            let currentRank = '';
+
+            // Define qualification hierarchy (from lowest to highest)
+            const qualificationHierarchy = [
+                '6-12 units earned, Master\'s Degree',
+                '15-18 units earned, Master\'s Degree',
+                '24-33 units earned, Master\'s Degree, Engineer, Medical Doctor',
+                'CAR, Master\'s Degree',
+                'Full-fledged Master\'s Degree with 5 yrs of relevant experience, CPA',
+                'Full-fledged Master\'s Degree with at least 9 units in PhD or DM',
+                'Full-fledged Doctors, Juris Doctors, Lawyers'
+            ];
+
+            // Define rank hierarchy (from lowest to highest)
+            const rankHierarchy = [
+                'Instructor I',
+                'Instructor II',
+                'Instructor III',
+                'Assistant Professor I',
+                'Assistant Professor II',
+                'Assistant Professor III',
+                'Assistant Professor IV'
+            ];
+
+            // When a table row is clicked, populate the modal
             $('#rankTable tbody tr').on('click', function() {
                 // Get data from the clicked row
                 const employeeId = $(this).find('td:eq(1)').text().trim();
                 const fullName = $(this).find('td:eq(2)').text().trim();
                 const field = $(this).find('td:eq(3)').text().trim();
                 const qualification = $(this).find('td:eq(4)').text().trim();
-                const currentRank = $(this).find('td:eq(5)').text().trim();
+                const rankValue = $(this).find('td:eq(5)').text().trim();
+
+                // Store current values for later comparison
+                currentQualification = qualification;
+                currentRank = rankValue;
 
                 // Fill the modal form with the employee's data
                 $('#r_emp').val(fullName);
-                $('#employee_id').val(employeeId); // This is the important value for finding the record
+                $('#employee_id').val(employeeId);
 
                 // Set the field value
                 if (field && field !== '') {
@@ -445,29 +495,91 @@
                     }
                 }
 
+                // Apply the hierarchy filtering with visual enhancements
+                disableLowerQualifications(qualification);
+                disableLowerRanks(rankValue);
+
                 // Set the qualification value
                 if (qualification && qualification !== '') {
-                    let qualOption = $('#updateQualification option').filter(function() {
-                        return $(this).val() === qualification;
-                    });
-
-                    if (qualOption.length) {
-                        qualOption.prop('selected', true);
-                    }
+                    $('#updateQualification').val(qualification);
                 }
 
                 // Set the rank value
-                if (currentRank && currentRank !== '') {
-                    $('#updated_rank option').filter(function() {
-                        return $(this).val() === currentRank;
-                    }).prop('selected', true);
+                if (rankValue && rankValue !== '') {
+                    $('#updated_rank').val(rankValue);
                 }
 
                 // Open the modal
                 $('#updateRankModal').modal('show');
             });
-        });
-        $(document).ready(function() {
+
+            // Function to disable qualifications lower than current
+            function disableLowerQualifications(currentQual) {
+                if (!currentQual || !qualificationHierarchy.includes(currentQual)) return;
+
+                const currentIndex = qualificationHierarchy.indexOf(currentQual);
+
+                $('#updateQualification option').each(function() {
+                    const optionValue = $(this).val();
+                    if (optionValue === '') return; // Skip empty option
+
+                    const optionIndex = qualificationHierarchy.indexOf(optionValue);
+                    if (optionIndex === -1) return; // Skip if not in hierarchy
+
+                    // Disable if lower or equal level
+                    if (optionIndex <= currentIndex) {
+                        $(this).prop('disabled', true);
+                        $(this).css('color', '#aaa'); // Gray out disabled options
+                    } else {
+                        $(this).prop('disabled', false);
+                        $(this).css('color', ''); // Reset color for enabled options
+
+                        // Add visual highlight for available options
+                        $(this).css({
+                            'background-color': '#e8f4ff',
+                            'font-weight': 'bold',
+                            'color': '#0066cc'
+                        });
+                    }
+                });
+
+            }
+
+            // Function to disable ranks lower than current
+            function disableLowerRanks(currentRankVal) {
+                if (!currentRankVal || !rankHierarchy.includes(currentRankVal)) return;
+
+                const currentIndex = rankHierarchy.indexOf(currentRankVal);
+
+                $('#updated_rank option').each(function() {
+                    const optionValue = $(this).val();
+                    if (optionValue === '') return; // Skip empty option
+
+                    const optionIndex = rankHierarchy.indexOf(optionValue);
+                    if (optionIndex === -1) return; // Skip if not in hierarchy
+
+                    // Disable if lower or equal level
+                    if (optionIndex <= currentIndex) {
+                        $(this).prop('disabled', true);
+                        $(this).css('color', '#aaa'); // Gray out disabled options
+                    } else {
+                        $(this).prop('disabled', false);
+                        $(this).css('color', ''); // Reset color for enabled options
+
+                        // Add visual highlight for available options
+                        $(this).css({
+                            'background-color': '#e8f4ff',
+                            'font-weight': 'bold',
+                            'color': '#0066cc'
+                        });
+                    }
+                });
+            }
+
+            // ==================================================
+            // AUTO-SELECT RANK BASED ON QUALIFICATION
+            // ==================================================
+
             // Auto-select rank based on qualification
             $('#updateQualification').on('change', function() {
                 const qualification = $(this).val();
@@ -500,16 +612,152 @@
                         suggestedRank = '';
                 }
 
-                // Set the suggested rank in the dropdown
+                // Set the suggested rank in the dropdown - direct value approach
                 if (suggestedRank) {
-                    $('#updated_rank option').each(function() {
-                        if ($(this).val() === suggestedRank) {
-                            $(this).prop('selected', true);
-                            return false; // Break the loop
+                    // Direct value setting approach
+                    $('#updated_rank').val(suggestedRank);
+
+                    // If the value didn't set (because it might be disabled),
+                    // check if we need to find a higher rank
+                    if ($('#updated_rank').val() !== suggestedRank) {
+                        // Find current suggested rank index
+                        const suggestedIndex = rankHierarchy.indexOf(suggestedRank);
+
+                        // Try each higher rank until we find one that's not disabled
+                        for (let i = suggestedIndex + 1; i < rankHierarchy.length; i++) {
+                            const higherRank = rankHierarchy[i];
+                            const rankOption = $('#updated_rank option[value="' + higherRank + '"]');
+
+                            if (rankOption.length && !rankOption.prop('disabled')) {
+                                $('#updated_rank').val(higherRank);
+                                break;
+                            }
                         }
-                    });
+                    }
+                } else {
+                    // If no qualification selected, clear rank
+                    $('#updated_rank').val('');
                 }
             });
+
+            // ==================================================
+            // ENHANCED FORM VALIDATION
+            // ==================================================
+
+            // When modal is closed, reset all options
+            $('#updateRankModal').on('hidden.bs.modal', function() {
+                // Enable all options and reset styling
+                $('#updateQualification option, #updated_rank option').prop('disabled', false).css({
+                    'background-color': '',
+                    'color': '',
+                    'font-weight': ''
+                });
+
+                // Reset values
+                $('#updateQualification, #updated_rank').val('');
+
+                // Reset current values
+                currentQualification = '';
+                currentRank = '';
+
+                // Remove any validation styling
+                $('.is-invalid').removeClass('is-invalid');
+                $('.invalid-feedback').remove();
+            });
+
+            // Add form validation to prevent submission with invalid values
+            $('.needs-validation').on('submit', function(e) {
+                // Reset validation styling
+                $('.is-invalid').removeClass('is-invalid');
+                $('.invalid-feedback').remove();
+
+                // Flag to track validation status
+                let isValid = true;
+
+                // Check required fields
+                if ($('#updateQualification').val() === '') {
+                    e.preventDefault();
+                    $('#updateQualification').addClass('is-invalid');
+                    $('#updateQualification').after(
+                        '<div class="invalid-feedback">Update Qualification is required</div>');
+                    isValid = false;
+                }
+
+                if ($('#updated_rank').val() === '') {
+                    e.preventDefault();
+                    $('#updated_rank').addClass('is-invalid');
+                    $('#updated_rank').after(
+                        '<div class="invalid-feedback">Final Rank Designation is required</div>');
+                    isValid = false;
+                }
+
+                // Check if anything has changed
+                if (isValid && $('#updateQualification').val() === currentQualification && $(
+                        '#updated_rank').val() === currentRank) {
+                    e.preventDefault();
+                    alert('Please make changes before submitting.');
+                    return false;
+                }
+
+                // Check promotion hierarchy rules
+                if (isValid && currentQualification) {
+                    const currentQualIndex = qualificationHierarchy.indexOf(currentQualification);
+                    const selectedQualIndex = qualificationHierarchy.indexOf($('#updateQualification')
+                        .val());
+
+                    if (selectedQualIndex <= currentQualIndex && currentQualIndex !== -1 &&
+                        selectedQualIndex !== -1) {
+                        e.preventDefault();
+                        $('#updateQualification').addClass('is-invalid');
+                        $('#updateQualification').after(
+                            '<div class="invalid-feedback">You can only select a higher qualification than the current one.</div>'
+                        );
+                        isValid = false;
+                    }
+                }
+
+                if (isValid && currentRank) {
+                    const currentRankIndex = rankHierarchy.indexOf(currentRank);
+                    const selectedRankIndex = rankHierarchy.indexOf($('#updated_rank').val());
+
+                    if (selectedRankIndex <= currentRankIndex && currentRankIndex !== -1 &&
+                        selectedRankIndex !== -1) {
+                        e.preventDefault();
+                        $('#updated_rank').addClass('is-invalid');
+                        $('#updated_rank').after(
+                            '<div class="invalid-feedback">You can only select a higher rank than the current one.</div>'
+                        );
+                        isValid = false;
+                    }
+                }
+
+                return isValid;
+            });
+
+            // Add CSS for validation styling
+            if (!$('#validation-styles').length) {
+                $('<style id="validation-styles">')
+                    .prop('type', 'text/css')
+                    .html(`
+                .is-invalid {
+                    border-color: #dc3545 !important;
+                    padding-right: calc(1.5em + 0.75rem) !important;
+                    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e") !important;
+                    background-repeat: no-repeat !important;
+                    background-position: right calc(0.375em + 0.1875rem) center !important;
+                    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem) !important;
+                }
+
+                .invalid-feedback {
+                    display: block;
+                    width: 100%;
+                    margin-top: 0.25rem;
+                    font-size: 80%;
+                    color: #dc3545;
+                }
+            `)
+                    .appendTo('head');
+            }
         });
     </script>
 

@@ -24,6 +24,17 @@ class PromotionController extends Controller
         return view('employee.promotion.index', compact('employeeInfo', 'rankInfo'));
     }
 
+    public function status()
+    {
+        $employee = Auth::user();
+
+        $employeeInfo = MasterlistModel::where('employee_id', $employee->employee_id)->first();
+
+        $rankInfo = RankModel::where('masterlist_id', $employeeInfo->id)->first();
+
+        return view('employee.promotion.status', compact('employeeInfo', 'rankInfo'));
+    }
+
     public function store(Request $request)
     {
         // Validate the request data
@@ -39,6 +50,7 @@ class PromotionController extends Controller
             'requested_rank' => 'required|string|max:255',
             'justification' => 'nullable|string',
             'certificate' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
+            'cert_earning_units_path' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048',
             'tor' => 'nullable|file|mimes:pdf,doc,docx,jpg,jpeg,png|max:2048'
         ]);
 
@@ -48,12 +60,19 @@ class PromotionController extends Controller
 
         // Handle file uploads
         $certificatePath = null;
+        $certEarningUnitsPath = null;
         $torPath = null;
 
         if ($request->hasFile('certificate')) {
             $certificate = $request->file('certificate');
             $certificateName = time() . '_' . $employee->employee_id . '_certificate.' . $certificate->getClientOriginalExtension();
             $certificatePath = $certificate->storeAs('promotion_documents', $certificateName, 'public');
+        }
+
+        if ($request->hasFile('cert_earning_units')) {
+            $certEarningUnits = $request->file('cert_earning_units');
+            $certEarningUnitsName = time() . '_' . $employee->employee_id . '_cert_earning_units.' . $certEarningUnits->getClientOriginalExtension();
+            $certEarningUnitsPath = $certEarningUnits->storeAs('promotion_documents', $certEarningUnitsName, 'public');
         }
 
         if ($request->hasFile('tor')) {
@@ -77,6 +96,7 @@ class PromotionController extends Controller
                 'last_promotion_date' => $request->last_promotion_date,
                 'justification' => $request->justification,
                 'certificate_path' => $certificatePath,
+                'cert_earning_units_path' => $certEarningUnitsPath,
                 'tor_path' => $torPath,
                 'status' => 'pending'
             ];
@@ -89,16 +109,17 @@ class PromotionController extends Controller
                 RankModel::create($rankingData);
             }
 
-            // Create history record - make sure to include current_rank
+            // Create history record
             RankingHistoryModel::create([
                 'masterlist_id' => $employeeInfo->id,
                 'employee_id' => $employee->employee_id,
                 'previous_rank' => $request->current_rank,
-                'current_rank' => $request->current_rank, // Add this line
+                'current_rank' => $request->current_rank,
                 'current_qua' => $request->current_qua,
                 'requested_rank' => $request->requested_rank,
                 'justification' => $request->justification,
                 'certificate_path' => $certificatePath,
+                'cert_earning_units_path' => $certEarningUnitsPath,
                 'tor_path' => $torPath,
                 'status' => 'pending'
             ]);
@@ -106,7 +127,7 @@ class PromotionController extends Controller
             // Commit transaction
             \DB::commit();
 
-            return redirect()->to('/promotion')->with('success', 'Ranking request submitted successfully!');
+            return redirect()->to('/promotion/status')->with('success', 'Ranking request submitted successfully!');
         } catch (\Exception $e) {
             // Rollback transaction
             \DB::rollBack();
@@ -114,6 +135,9 @@ class PromotionController extends Controller
             // Delete uploaded files if there was an error
             if ($certificatePath) {
                 Storage::disk('public')->delete($certificatePath);
+            }
+            if ($certEarningUnitsPath) {
+                Storage::disk('public')->delete($certEarningUnitsPath);
             }
             if ($torPath) {
                 Storage::disk('public')->delete($torPath);

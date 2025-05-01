@@ -76,11 +76,17 @@ class OtherController extends Controller
 
     public function approved_requests()
     {
+        // Join masterlist table to get employee data but use the date from tbl_coe_req.created_at
         $approvedRequests = RequestModel::join('masterlist', function ($join) {
             $join->on('tbl_coe_req.employee_id', '=', DB::raw('BINARY masterlist.employee_id'));
         })
             ->where('tbl_coe_req.status', 'approve')
-            ->select('tbl_coe_req.*', 'masterlist.created_at')
+            ->select(
+                'tbl_coe_req.*',
+                // Use tbl_coe_req.created_at for the issue date
+                DB::raw("DATE_FORMAT(tbl_coe_req.created_at, '%Y-%m-%d') as date_started_raw"),
+                DB::raw("DATE_FORMAT(tbl_coe_req.created_at, '%M %d, %Y') as date_started_formatted")
+            )
             ->get();
 
         return view('admin.others.Approve', compact('approvedRequests'));

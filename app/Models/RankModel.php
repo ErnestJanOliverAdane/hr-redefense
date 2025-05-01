@@ -23,6 +23,7 @@ class RankModel extends Model
         'justification',
         'certificate_path',
         'tor_path',
+        'cert_earning_units_path',
         'requested_rank',
         'status',
         'last_promotion_date',

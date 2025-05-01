@@ -10,13 +10,15 @@ class EmpDashboardController extends Controller
 {
     public function index()
     {
-        // Get the logged-in employee
         $employee = Auth::user();
 
-        // Fetch related personal information using the defined relationship
+        if ($employee->employment_status === 'disabled') {
+            return redirect('/emp/dashboard')->with('error', 'Your account is disabled.');
+        }
+
         $personalInformation = $employee->personal_information;
 
-        // Pass the data to the view
         return view('employee.dashboard.index', compact('employee', 'personalInformation'));
     }
+
 }
