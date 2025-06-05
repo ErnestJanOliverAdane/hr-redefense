@@ -16,7 +16,7 @@
                 <table class="table table-bordered">
 
                     <tbody>
-                        <tr>
+                        {{-- <tr>
                             <td class="col-lg-5">
                                 <div class="form-group">
                                     <label class="form-label" for="inp_tin">Tin No.<b class="text-danger">*</b></label>
@@ -29,7 +29,7 @@
                                         value="{{ old('inp_tin', $personalinformation-> tin_no ?? '') }}">
                                 </div>
                             </td>
-                        </tr>
+                        </tr> --}}
                         <tr>
                             <td class="col-lg-5">
                                 <div class="form-group">
@@ -52,8 +52,8 @@
                             </td>
                             <td class="col-lg-7">
                                 <div class="form-control-wrap">
-                                    <input type="text" class="form-control" id="inp_bd" name="inp_bd"
-                                        placeholder="" required readonly
+                                    <input type="text" class="form-control" id="inp_bd" name="inp_bd" placeholder=""
+                                        required readonly
                                         value="{{ old('inp_bd', $personalinformation->date_of_birth ?? '') }}">
                                 </div>
                             </td>
@@ -66,8 +66,8 @@
                             </td>
                             <td class="col-lg-7">
                                 <div class="form-control-wrap">
-                                    <input type="email" class="form-control" id="inp_bp" name="inp_bp"
-                                        placeholder="" required readonly
+                                    <input type="email" class="form-control" id="inp_bp" name="inp_bp" placeholder=""
+                                        required readonly
                                         value="{{ old('inp_bp', $personalinformation->place_of_birth ?? '') }}">
                                 </div>
                             </td>

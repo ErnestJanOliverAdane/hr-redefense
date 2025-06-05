@@ -6,9 +6,9 @@
 <div class="nk-sidebar nk-sidebar-fixed is-light " data-content="sidebarMenu">
     <div class="nk-sidebar-element nk-sidebar-head">
         <div class="nk-sidebar-brand">
-            <a href="html/index.html" class="logo-link nk-sidebar-logo">
-                <img class="logo-dark" style="height: 65px;" src="/logo2.png" srcset="/logo.png 2x" alt="logo">
-                <!--<img class="logo-small logo-img logo-img-small" src="/TCC.png" srcset="/logo.png 2x" alt="logo-small"> -->
+            <a href="{{ route('dashboard') }}" class="logo-link nk-sidebar-logo">
+                <img class="logo-dark" style="height: 65px;" src="/TCC.png" srcset="/TCC.png 2x" alt="logo">
+                {{-- <img class="logo-small logo-img logo-img-small" src="/TCC.png" srcset="/TCC.png 2x" alt="logo-small">  --}}
 
             </a>
         </div>
@@ -80,17 +80,17 @@
 
                     </li>
 
-                    <li class="nk-menu-heading pt-3">
+                    {{-- <li class="nk-menu-heading pt-3">
                         <h6 class="overline-title text-primary-alt">OTHERS</h6>
-                    </li>
+                    </li> --}}
 
-                    <li class="nk-menu-item">
+                    {{-- <li class="nk-menu-item">
                         <a href="/others/coe" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-task"></em></span>
                             <span class="nk-menu-text">COE</span>
                         </a>
                     </li>
-                    {{-- <li class="nk-menu-item">
+                    <li class="nk-menu-item">
                         <a href="/others/so" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-task"></em></span>
                             <span class="nk-menu-text">SO</span>
@@ -125,7 +125,7 @@
                         </ul>
                     </li>
 
-                    {{-- <li class="nk-menu-item has-sub">
+                    <li class="nk-menu-item has-sub">
                         <a href="javascript:void(0);" class="nk-menu-link nk-menu-toggle">
                             <span class="nk-menu-icon"><em class="icon ni ni-file"></em></span>
                             <span class="nk-menu-text">SO Request</span>
@@ -147,7 +147,7 @@
                                 </a>
                             </li>
                         </ul>
-                    </li> --}}
+                    </li>
 
                     <li class="nk-menu-item has-sub">
                         <a href="javascript:void(0);" class="nk-menu-link nk-menu-toggle">

@@ -69,7 +69,6 @@ class PersonalDataSheetController extends Controller
     public function store(Request $request)
     {
         try {
-
             $existingRecord = PersonalInformationModel::where('employee_id', auth()->guard('employee')->user()->employee_id)
                 ->first();
 
@@ -85,39 +84,33 @@ class PersonalDataSheetController extends Controller
             if (!$personalInfo || !$personalInfo->personal_information_id) {
                 throw new Exception('Failed to create personal information record');
             }
-            Log::info('Successfully created personal information with ID: ' . $personalInfo->personal_information_id);
 
             // 2. Create Family Background
             $this->createFamilyBackground($request, $personalInfo);
-            Log::info('Successfully created family background');
 
             // 3. Create Children Records
             $this->createChildren($request, $personalInfo);
-            Log::info('Successfully created children records');
 
             // 4. Create Educational Background
             $this->createEducationalBackground($request, $personalInfo);
-            Log::info('Successfully created educational background');
 
             // 5. Create Civil Service Eligibility
             $this->createCivilServiceEligibility($request, $personalInfo);
-            Log::info('Successfully created civil service eligibility');
 
             // 6. Create Work Experience
             $this->createWorkExperience($request, $personalInfo);
-            Log::info('Successfully created work experience');
 
             // 7. Create Voluntary Work
             $this->createVoluntaryWork($request, $personalInfo);
-            Log::info('Successfully created voluntary work');
 
             // 8. Create Learning Development
             $this->createLearningDevelopment($request, $personalInfo);
-            Log::info('Successfully created learning development');
 
             // 9. Create Other Information
             $this->createOtherInformation($request, $personalInfo);
-            Log::info('Successfully created other information');
+
+            // 10. Create Additional Questions
+            $this->createAdditionalQuestions($request, $personalInfo);
 
             DB::commit();
             Log::info('Successfully committed all Personal Data Sheet records');
@@ -187,11 +180,6 @@ class PersonalDataSheetController extends Controller
     private function createFamilyBackground(Request $request, PersonalInformationModel $personalInfo)
     {
         try {
-            $personalInfoExists = PersonalInformationModel::find($personalInfo->personal_information_id);
-            if (!$personalInfoExists) {
-                throw new Exception('Referenced personal information record does not exist');
-            }
-
             $familyBackgroundData = [
                 'personal_information_id' => $personalInfo->personal_information_id,
                 'spouse_surname' => $request->spouse_surname,
@@ -208,7 +196,8 @@ class PersonalDataSheetController extends Controller
                 'father_name_extension' => $request->father_name_extension,
                 'mother_surname' => $request->mother_surname,
                 'mother_first_name' => $request->mother_first_name,
-                'mother_middle_name' => $request->mother_middle_name
+                'mother_middle_name' => $request->mother_middle_name,
+                'mother_maiden_name' => $request->mother_maiden_name
             ];
 
             $familyBackground = FamilyBackgroundModel::create($familyBackgroundData);
@@ -217,7 +206,7 @@ class PersonalDataSheetController extends Controller
                 throw new Exception('Failed to create family background record');
             }
 
-            Log::info('Successfully created family background for personal_informations_id: ' . $personalInfo->personal_information_id);
+            Log::info('Successfully created family background for personal_information_id: ' . $personalInfo->personal_information_id);
             return $familyBackground;
 
         } catch (Exception $e) {
@@ -249,15 +238,19 @@ class PersonalDataSheetController extends Controller
     private function createEducationalBackground(Request $request, PersonalInformationModel $personalInfo)
     {
         try {
+            // Fixed education levels array
             $educationLevels = [
                 'elementary' => 'Elementary',
                 'secondary' => 'Secondary',
                 'vocational' => 'Vocational',
-                'college' => 'College'
+                'college' => 'College',
+                'graduate' => 'Graduate'
             ];
 
             foreach ($educationLevels as $requestKey => $dbValue) {
-                if ($request->has($requestKey . '_school')) {
+                $schoolField = $requestKey . '_school';
+
+                if ($request->filled($schoolField)) {
                     EducationalBackgroundModel::create([
                         'personal_information_id' => $personalInfo->personal_information_id,
                         'level' => $dbValue,
@@ -269,6 +262,8 @@ class PersonalDataSheetController extends Controller
                         'year_graduated' => $request->{$requestKey . '_year_graduated'},
                         'academic_honors' => $request->{$requestKey . '_honors'}
                     ]);
+
+                    Log::info("Created educational record for level {$dbValue}");
                 }
             }
         } catch (Exception $e) {
@@ -276,6 +271,7 @@ class PersonalDataSheetController extends Controller
             throw $e;
         }
     }
+
 
     private function createCivilServiceEligibility(Request $request, PersonalInformationModel $personalInfo)
     {
@@ -302,7 +298,7 @@ class PersonalDataSheetController extends Controller
     private function createWorkExperience(Request $request, PersonalInformationModel $personalInfo)
     {
         try {
-            Log::info('Entire Request Data:', ['request' => $request->all()]);
+            Log::info('Work Experience Request Data:', ['request' => $request->all()]);
 
             if ($request->has('work')) {
                 $workData = $request->work;
@@ -314,18 +310,18 @@ class PersonalDataSheetController extends Controller
                     try {
                         $workExperience = [
                             'personal_information_id' => $personalInfo->personal_information_id,
-                            'position_title' => $work['position_title'][$i] ?? 'N/A',
-                            'department' => $work['department'][$i] ?? 'N/A',
-                            'monthly_salary' => $work['monthly_salary'][$i] ?? 0,
-                            'salary_grade' => $work['salary_grade'][$i] ?? 'N/A',
-                            'status_of_appointment' => $work['status_of_appointment'][$i] ?? 'N/A',
-                            'govt_service' => $work['gov_service'][$i] ?? 'N/A',
-                            'from_date' => $work['from_date'][$i] ?? now()->toDateString(),
-                            'to_date' => $work['to_date'][$i] ?? now()->toDateString()
+                            'position_title' => $workData['position_title'][$i] ?? 'N/A',
+                            'department' => $workData['department'][$i] ?? 'N/A',
+                            'monthly_salary' => $workData['monthly_salary'][$i] ?? 0,
+                            'salary_grade' => $workData['salary_grade'][$i] ?? 'N/A',
+                            'status_of_appointment' => $workData['status_of_appointment'][$i] ?? 'N/A',
+                            // Fixed field name mismatch
+                            'govt_service' => $workData['gov_service'][$i] ?? 'N/A',
+                            'from_date' => $workData['from_date'][$i] ?? now()->toDateString(),
+                            'to_date' => $workData['to_date'][$i] ?? now()->toDateString()
                         ];
 
                         Log::info('Creating Work Experience:', $workExperience);
-
                         WorkExperienceModel::create($workExperience);
                     } catch (Exception $e) {
                         Log::error('Error creating individual work experience:', [
@@ -354,7 +350,8 @@ class PersonalDataSheetController extends Controller
                         VoluntaryWorkModel::create([
                             'personal_information_id' => $personalInfo->personal_information_id,
                             'organization_name' => $org,
-                            'organization_address' => $request->voluntary['organization_address'][$key] ?? 'N/A',
+                            // Made organization_address optional since it's not in the form
+                            'organization_address' => $request->voluntary['organization_address'][$key] ?? '',
                             'position' => $request->voluntary['position'][$key] ?? 'N/A',
                             'hours' => $request->voluntary['number_of_hours'][$key] ?? 0,
                             'from_date' => $request->voluntary['from_date'][$key] ?? now()->toDateString(),
@@ -362,14 +359,13 @@ class PersonalDataSheetController extends Controller
                         ]);
                     }
                 }
-                Log::info('Successfully created voluntary work records for personal_informations_id: ' . $personalInfo->id);
+                Log::info('Successfully created voluntary work records for personal_information_id: ' . $personalInfo->personal_information_id);
             }
         } catch (Exception $e) {
             Log::error('Error creating voluntary work: ' . $e->getMessage());
             throw $e;
         }
     }
-
 
     private function createLearningDevelopment(Request $request, PersonalInformationModel $personalInfo)
     {

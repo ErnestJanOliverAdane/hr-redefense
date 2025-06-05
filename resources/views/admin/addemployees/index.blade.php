@@ -171,6 +171,25 @@
                             </div>
                         </div>
 
+                        <!-- Employee Type -->
+                        <div class="row mt-2 align-center">
+                            <div class="col-lg-5">
+                                <div class="form-group">
+                                    <label class="form-label" for="job_title">Employee Type <b
+                                            class="text-danger">*</b></label>
+                                    <span class="form-note">Specify the employee Type here.</span>
+                                </div>
+                            </div>
+                            <div class="col-lg-7">
+                                <select class="form-control" id="job_type" name="job_type" required>
+                                    <option value="">Select Employee Type</option>
+                                    @foreach ($jobTypes as $type)
+                                        <option value="{{ $type }}">{{ $type }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
                         <!-- Job Title (Text Input) -->
                         <div class="row mt-2 align-center">
                             <div class="col-lg-5">
@@ -209,25 +228,6 @@
                             </div>
                         </div>
 
-
-                        <!-- Job Type -->
-                        <div class="row mt-2 align-center">
-                            <div class="col-lg-5">
-                                <div class="form-group">
-                                    <label class="form-label" for="job_title">Job Type <b
-                                            class="text-danger">*</b></label>
-                                    <span class="form-note">Specify the job Type here.</span>
-                                </div>
-                            </div>
-                            <div class="col-lg-7">
-                                <select class="form-control" id="job_type" name="job_type" required>
-                                    <option value="">Select Job Type</option>
-                                    @foreach ($jobTypes as $type)
-                                        <option value="{{ $type }}">{{ $type }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
 
                         <!-- Updated Faculty Fields Section -->
                         <div id="faculty-fields" style="display: none;">
@@ -426,20 +426,103 @@
 
 
                     <script>
-                        document.getElementById('job_type').addEventListener('change', function() {
-                            const facultyFields = document.getElementById('faculty-fields');
-                            const facultyInputs = facultyFields.querySelectorAll('input, select');
+                        document.addEventListener('DOMContentLoaded', function() {
+                            // Get the job type select element
+                            const jobTypeSelect = document.getElementById('job_type');
+                            if (!jobTypeSelect) {
+                                console.error("Job type select element not found!");
+                                return;
+                            }
 
-                            if (this.value === 'Faculty') {
-                                facultyFields.style.display = 'block';
-                                facultyInputs.forEach(input => {
-                                    input.setAttribute('required', 'required');
-                                });
-                            } else {
-                                facultyFields.style.display = 'none';
-                                facultyInputs.forEach(input => {
-                                    input.removeAttribute('required');
-                                    input.value = '';
+                            // Function to update form fields visibility
+                            function updateFieldsVisibility() {
+                                // Get references to all necessary elements
+                                const facultyFields = document.getElementById('faculty-fields');
+                                const jobTitleRow = document.querySelector('label[for="job_title"]').closest('.row');
+                                const departmentRow = document.querySelector('label[for="department"]').closest('.row');
+
+                                // Get references to the actual input elements
+                                const jobTitleInput = document.getElementById('job_title');
+                                const departmentSelect = document.getElementById('department');
+
+                                // Based on job type selection, show/hide fields
+                                if (jobTypeSelect.value === 'Faculty') {
+                                    // Show faculty-specific fields
+                                    if (facultyFields) {
+                                        facultyFields.style.display = 'block';
+                                        facultyFields.querySelectorAll('input, select').forEach(input => {
+                                            input.setAttribute('required', 'required');
+                                        });
+                                    }
+
+                                    // Hide job title field
+                                    if (jobTitleRow) jobTitleRow.style.cssText = 'display: none !important';
+
+                                    // Since job title is hidden but might be required by backend,
+                                    // set a default value to pass validation
+                                    if (jobTitleInput) {
+                                        jobTitleInput.value = 'Faculty Position'; // Default value for hidden job title
+                                    }
+
+                                    // Show department field
+                                    if (departmentRow) departmentRow.style.cssText = 'display: flex !important';
+
+                                } else if (jobTypeSelect.value === 'Staff') {
+                                    // Hide faculty-specific fields
+                                    if (facultyFields) {
+                                        facultyFields.style.display = 'none';
+                                        facultyFields.querySelectorAll('input, select').forEach(input => {
+                                            input.removeAttribute('required');
+                                            input.value = '';
+                                        });
+                                    }
+
+                                    // Show job title field
+                                    if (jobTitleRow) jobTitleRow.style.cssText = 'display: flex !important';
+
+                                    // Hide department field
+                                    if (departmentRow) departmentRow.style.cssText = 'display: none !important';
+
+                                    // Since department is hidden but still required by backend,
+                                    // select the first option or set a default value
+                                    if (departmentSelect && departmentSelect.options.length > 0) {
+                                        // Select the first non-empty option to satisfy the backend validation
+                                        for (let i = 0; i < departmentSelect.options.length; i++) {
+                                            if (departmentSelect.options[i].value) {
+                                                departmentSelect.selectedIndex = i;
+                                                break;
+                                            }
+                                        }
+                                    }
+
+                                } else {
+                                    // Default case (no selection)
+                                    if (facultyFields) {
+                                        facultyFields.style.display = 'none';
+                                        facultyFields.querySelectorAll('input, select').forEach(input => {
+                                            input.removeAttribute('required');
+                                            input.value = '';
+                                        });
+                                    }
+
+                                    // Show both fields
+                                    if (jobTitleRow) jobTitleRow.style.cssText = 'display: flex !important';
+                                    if (departmentRow) departmentRow.style.cssText = 'display: flex !important';
+                                }
+                            }
+
+                            // Set up the change event handler
+                            jobTypeSelect.addEventListener('change', updateFieldsVisibility);
+
+                            // Run it immediately if there's a value already selected
+                            updateFieldsVisibility();
+
+                            // Also run just before form submission to ensure hidden fields have values
+                            const form = jobTypeSelect.closest('form');
+                            if (form) {
+                                form.addEventListener('submit', function(e) {
+                                    // Update field values one last time before submitting
+                                    updateFieldsVisibility();
                                 });
                             }
                         });

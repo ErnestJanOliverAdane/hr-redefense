@@ -1,0 +1,256 @@
+
+        /* Progress Bar Styles */
+        .progress-wrapper {
+            margin-bottom: 30px;
+        }
+
+        .progress-bar-nav {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .progress-bar-nav::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #e0e0e0;
+            z-index: -1;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 20px;
+            left: 0;
+            height: 2px;
+            background: #28a745;
+            transition: width 0.5s ease;
+            z-index: -1;
+        }
+
+        .progress-step {
+            text-align: center;
+            position: relative;
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .progress-step-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-weight: bold;
+            color: #666;
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .progress-step.active .progress-step-icon {
+            background: #007bff;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .progress-step.completed .progress-step-icon {
+            background: #28a745;
+            color: white;
+        }
+
+        .progress-step.completed .progress-step-icon::after {
+            content: '✓';
+            position: absolute;
+            font-size: 18px;
+        }
+
+        .progress-step-title {
+            font-size: 12px;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .progress-step.active .progress-step-title {
+            color: #007bff;
+            font-weight: bold;
+        }
+
+        .progress-step.completed .progress-step-title {
+            color: #28a745;
+        }
+
+        /* Step Content Animation */
+        .step-content {
+            display: none;
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.5s ease;
+        }
+
+        .step-content.active {
+            display: block;
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .step-content.slide-out-left {
+            transform: translateX(-50px);
+            opacity: 0;
+        }
+
+        .step-content.slide-in-right {
+            transform: translateX(50px);
+            opacity: 0;
+        }
+
+        /* Navigation Buttons */
+        .form-navigation {
+            margin-top: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        /* Validation Styles */
+        .field-error {
+            border-color: #dc3545 !important;
+        }
+
+        .error-message {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+
+        /* Summary Review */
+        .review-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .review-section h6 {
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        .review-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        .review-item:last-child {
+            border-bottom: none;
+        }
+
+        .review-label {
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .review-value {
+            color: #212529;
+        }
+
+        /* Loading Overlay */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid #007bff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Tooltips */
+        .info-tooltip {
+            cursor: help;
+            color: #007bff;
+            margin-left: 5px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .progress-step-title {
+                font-size: 10px;
+            }
+
+            .progress-step-icon {
+                width: 30px;
+                height: 30px;
+                font-size: 14px;
+            }
+
+            .form-navigation {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .nav-buttons {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        /* Auto-save indicator */
+        .auto-save-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #28a745;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            display: none;
+            z-index: 1000;
+        }
+
+        /* Step completion badge */
+        .step-badge {
+            display: inline-block;
+            background: #28a745;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 10px;
+        }

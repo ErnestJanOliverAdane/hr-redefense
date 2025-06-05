@@ -122,8 +122,6 @@ Route::middleware(['auth:web'])->group(function () {
 
 
     //
-    Route::get('/sorequest/sorequeststatus', [SOrequestController::class, 'sostatusrequest'])->name('employee.sorequest.sorequeststatus');
-
 
     Route::get('/employee/{masterlistId}/files', [EmployeeController::class, 'getEmployeeFiles']);
 
@@ -163,7 +161,7 @@ Route::middleware(['auth:web'])->group(function () {
         Route::get('/rejected', [OtherController::class, 'rejected_requests'])->name('admin.others.rejected');
 
 
-        // route sa pag pa display sa mga request sa mga fucking employee sa ilang so
+        // route sa pag pa display sa mga request sa mga fucking employee sa /so so
         Route::get('/sorequestlist', [OtherController::class, 'soindex'])->name('admin.others.sorequestlist');
 
 
@@ -294,5 +292,7 @@ Route::middleware(['auth:employee'])->group(function () {
     Route::get('/promotion', [PromotionController::class, 'index']);
     Route::get('/promotion/status', [PromotionController::class, 'status']);
     Route::post('/promotion/store', [PromotionController::class, 'store']);
+
+    Route::get('/sorequest/sorequeststatus', [SOrequestController::class, 'sostatusrequest'])->name('employee.sorequest.sorequeststatus');
 
 });

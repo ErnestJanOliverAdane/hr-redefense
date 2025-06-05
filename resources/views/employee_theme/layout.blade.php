@@ -20,6 +20,8 @@
     <script src="/assets/js/bundle.js?ver=3.0.3"></script>
     <script src="/assets/js/scripts.js?ver=3.0.3"></script>
     <script src="./assets/js/charts/chart-ecommerce.js?ver=3.0.3"></script>
+    <link rel="stylesheet" href="/assets/css/custom.css">
+
 
 </body>
 
